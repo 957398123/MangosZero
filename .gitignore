@@ -129,4 +129,6 @@ msbuild.cmd
 
 /cmake-build-debug/
 /cmake-build-release/
-.vs
+/.vs
+/CMakeSettings.json
+/out
