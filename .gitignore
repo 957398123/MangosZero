@@ -126,4 +126,7 @@ msbuild.cmd
 
 # File generated during compile
 /dep/libmpq/compile
+
 /cmake-build-debug/
+/cmake-build-release/
+.vs
