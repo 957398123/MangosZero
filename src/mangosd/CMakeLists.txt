@@ -47,6 +47,7 @@ if(WIN32)
     set(PRODUCT_ICON ${CMAKE_CURRENT_SOURCE_DIR}/mangosd.ico)
     set(PRODUCT_DESCRIPTION "${MANGOS_PKG} World Server")
     configure_file(${CMAKE_SOURCE_DIR}/cmake/win/VersionInfo.h.in ${CMAKE_CURRENT_BINARY_DIR}/VersionInfo.h)
+    configure_file(${CMAKE_SOURCE_DIR}/cmake/win/VersionInfo.rc ${CMAKE_CURRENT_BINARY_DIR}/VersionInfo.rc COPYONLY)
 endif()
 
 
@@ -55,7 +56,7 @@ add_executable(mangosd
     $<$<BOOL:${SOAP}>:${SRC_GRP_SOAP}>
     $<$<BOOL:${WIN32}>:
         ${CMAKE_CURRENT_BINARY_DIR}/VersionInfo.h
-        ${CMAKE_SOURCE_DIR}/cmake/win/VersionInfo.rc
+        ${CMAKE_CURRENT_BINARY_DIR}/VersionInfo.rc
     >
 )
 

@@ -46,6 +46,7 @@ if(WIN32)
     set(PRODUCT_ICON ${CMAKE_CURRENT_SOURCE_DIR}/realmd.ico)
     set(PRODUCT_DESCRIPTION "MaNGOS Authentication Daemon")
     configure_file(${CMAKE_SOURCE_DIR}/cmake/win/VersionInfo.h.in ${CMAKE_CURRENT_BINARY_DIR}/VersionInfo.h)
+    configure_file(${CMAKE_SOURCE_DIR}/cmake/win/VersionInfo.rc ${CMAKE_CURRENT_BINARY_DIR}/VersionInfo.rc COPYONLY)
 endif()
 
 add_executable(realmd
@@ -56,7 +57,7 @@ add_executable(realmd
     Main.cpp
     $<$<BOOL:${WIN32}>:
         ${CMAKE_CURRENT_BINARY_DIR}/VersionInfo.h
-        ${CMAKE_SOURCE_DIR}/cmake/win/VersionInfo.rc
+        ${CMAKE_CURRENT_BINARY_DIR}/VersionInfo.rc
     >
 )
 

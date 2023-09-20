@@ -22,9 +22,12 @@
  * and lore are copyrighted by Blizzard Entertainment, Inc.
  */
 
+#include "Player.h"
 #include "Chat.h"
 #include "Language.h"
 #include "World.h"
+#include "Creature.h"
+#include "ObjectMgr.h"
 
 /*
     All commands related to discussions

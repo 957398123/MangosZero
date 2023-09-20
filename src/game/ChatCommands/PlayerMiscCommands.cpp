@@ -26,6 +26,8 @@
 #include "Language.h"
 #include "World.h"
 #include "Mail.h"
+#include "Player.h"
+#include "ObjectAccessor.h"
 
  /**********************************************************************
      CommandTable : commandTable

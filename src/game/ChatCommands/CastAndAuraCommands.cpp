@@ -26,6 +26,8 @@
 #include "Language.h"
 #include "SpellAuras.h"
 #include "SpellMgr.h"
+#include "Creature.h"
+#include "Player.h"
 
 /**********************************************************************
     CommandTable : castCommandTable
@@ -513,4 +515,3 @@ bool ChatHandler::HandleUnAuraGroupCommand(char* args)
         return true;
     }
 }
-

@@ -27,7 +27,8 @@
 #include "World.h"
 #include "Weather.h"
 #include "SpellMgr.h"
-#include "Util.h"
+#include "Player.h"
+#include <ObjectAccessor.h>
 
  /**********************************************************************
      CommandTable : commandTable

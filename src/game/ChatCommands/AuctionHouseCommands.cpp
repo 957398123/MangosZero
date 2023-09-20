@@ -24,6 +24,10 @@
 
 #include "Chat.h"
 #include "Language.h"
+#include "DBCStructure.h"
+#include "AuctionHouseMgr.h"
+#include "DBCStores.h"
+#include "ObjectMgr.h"
 
  /**********************************************************************
      CommandTable : auctionCommandTable

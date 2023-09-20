@@ -25,6 +25,9 @@
 #include "Chat.h"
 #include "Language.h"
 #include "SpellAuras.h"
+#include "DBCStores.h"
+#include "Player.h"
+#include "ObjectMgr.h"
 
  /**********************************************************************
       CommandTable : listCommandTable

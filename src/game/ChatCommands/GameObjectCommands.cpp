@@ -27,6 +27,9 @@
 #include "G3D/Quat.h"
 #include "MapManager.h"
 #include "GameEventMgr.h"
+#include "GameObject.h"
+#include "ObjectAccessor.h"
+#include "ObjectMgr.h"
 
  /**********************************************************************
      CommandTable : gobjectCommandTable
