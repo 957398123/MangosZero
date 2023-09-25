@@ -892,10 +892,10 @@ extern pAuraProcHandler AuraProcHandler[TOTAL_AURAS];
 
 enum CurrentSpellTypes
 {
-    CURRENT_MELEE_SPELL             = 0,
-    CURRENT_GENERIC_SPELL           = 1,
-    CURRENT_AUTOREPEAT_SPELL        = 2,
-    CURRENT_CHANNELED_SPELL         = 3
+    CURRENT_MELEE_SPELL             = 0,  // 当前普通攻击
+    CURRENT_GENERIC_SPELL           = 1,  // 当前普通法术
+    CURRENT_AUTOREPEAT_SPELL        = 2,  // 当前自动释放法术
+    CURRENT_CHANNELED_SPELL         = 3   // 当前引导法术
 };
 
 #define CURRENT_FIRST_NON_MELEE_SPELL 1
@@ -917,8 +917,22 @@ class GlobalCooldownMgr                                     // Shared by Player 
         GlobalCooldownMgr() {}
 
     public:
+        /**
+         * @brief 查找该法术是否存在公共CD
+         * @param spellInfo 
+         * @return 
+        */
         bool HasGlobalCooldown(SpellEntry const* spellInfo) const;
+        /**
+         * @brief 增加一个法术公共CD
+         * @param spellInfo 法术实体
+         * @param gcd 公共CD时间
+        */
         void AddGlobalCooldown(SpellEntry const* spellInfo, uint32 gcd);
+        /**
+         * @brief 移除一个法术的公共CD
+         * @param spellInfo 法术实体
+        */
         void CancelGlobalCooldown(SpellEntry const* spellInfo);
 
     private:

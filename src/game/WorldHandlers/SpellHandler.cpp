@@ -301,6 +301,7 @@ void WorldSession::HandleGameObjectUseOpcode(WorldPacket& recv_data)
 
 void WorldSession::HandleCastSpellOpcode(WorldPacket& recvPacket)
 {
+    // 获取技能编号
     uint32 spellId;
     recvPacket >> spellId;
 
@@ -314,19 +315,20 @@ void WorldSession::HandleCastSpellOpcode(WorldPacket& recvPacket)
 
     DEBUG_LOG("WORLD: got cast spell packet, spellId - %u, data length = " SIZEFMTD,
               spellId, recvPacket.size());
-
+    // 查找法术实体
     SpellEntry const* spellInfo = sSpellStore.LookupEntry(spellId);
-
+    // 如果没有查找到法术实体，不处理
     if (!spellInfo)
     {
         sLog.outError("WORLD: unknown spell id %u", spellId);
         recvPacket.rpos(recvPacket.wpos());                 // prevent spam at ignore packet
         return;
     }
-
+    // 如果技能释放者是玩家
     if (mover->GetTypeId() == TYPEID_PLAYER)
     {
         // not have spell in spellbook or spell passive and not casted by client
+        // 如果玩家释放的该技能不是被动并且处在CD中，不处理
         if (!((Player*)mover)->HasActiveSpell(spellId) || IsPassiveSpell(spellInfo))
         {
             sLog.outError("World: Player %u casts spell %u which he shouldn't have", mover->GetGUIDLow(), spellId);
@@ -338,6 +340,7 @@ void WorldSession::HandleCastSpellOpcode(WorldPacket& recvPacket)
     else
     {
         // not have spell in spellbook or spell passive and not casted by client
+        // 如果控制的生物单位释放的该技能不是被动且处于CD中，不处理
         if (!((Creature*)mover)->HasSpell(spellId) || IsPassiveSpell(spellInfo))
         {
             // cheater? kick? ban?
@@ -348,7 +351,7 @@ void WorldSession::HandleCastSpellOpcode(WorldPacket& recvPacket)
 
     // client provided targets
     SpellCastTargets targets;
-
+    // 获取技能释放目标
     recvPacket >> targets.ReadForCaster(_player);
 
     // auto-selection buff level base at target level (in spellInfo)
@@ -360,7 +363,7 @@ void WorldSession::HandleCastSpellOpcode(WorldPacket& recvPacket)
             spellInfo = actualSpellInfo;
         }
     }
-
+    // 创建技能并准备释放技能
     Spell* spell = new Spell(_player, spellInfo, false);
     spell->prepare(&targets);
 }

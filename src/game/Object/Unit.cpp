@@ -319,6 +319,7 @@ void Unit::Update(uint32 update_diff, uint32 p_time)
     // WARNING! Order of execution here is important, do not change.
     // Spells must be processed with event system BEFORE they go to _UpdateSpells.
     // Or else we may have some SPELL_STATE_FINISHED spells stalled in pointers, that is bad.
+    // 更新事件处理器
     m_Events.Update(update_diff);
     _UpdateSpells(update_diff);
 
@@ -9936,6 +9937,7 @@ Player* Unit::GetSpellModOwner() const
     {
         return (Player*)this;
     }
+    // 如果是宠物或者图腾，找到它的所有者。
     if (((Creature*)this)->IsPet() || ((Creature*)this)->IsTotem())
     {
         Unit* owner = GetOwner();

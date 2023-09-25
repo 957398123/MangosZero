@@ -2956,32 +2956,40 @@ void Spell::SetTargetMap(SpellEffectIndex effIndex, uint32 targetMode, UnitList&
 
 SpellCastResult Spell::prepare(SpellCastTargets const* targets, Aura* triggeredByAura, uint32 chance)
 {
+    // 设置技能释放目标
     m_targets = *targets;
-
+    // 获取施法者的坐标和朝向
     m_castPositionX = m_caster->GetPositionX();
     m_castPositionY = m_caster->GetPositionY();
     m_castPositionZ = m_caster->GetPositionZ();
     m_castOrientation = m_caster->GetOrientation();
-
+    // 如果技能是通过光环触发
     if (triggeredByAura)
     {
+        // 获取光环技能信息
         m_triggeredByAuraSpell  = triggeredByAura->GetSpellProto();
     }
 
     // create and add update event for this spell
+    // 创建并且更新技能事件到释放者事件处理列表
     SpellEvent* Event = new SpellEvent(this);
+    // 设置1ms后触发Event
     m_caster->m_Events.AddEvent(Event, m_caster->m_Events.CalculateTime(1));
 
     // Prevent casting at cast another spell (ServerSide check)
+    // 如果存在正在触发中的技能，或者技能释放者正在普通攻击（普通攻击也是一个技能）
     if (!m_IsTriggeredSpell && m_caster->IsNonMeleeSpellCasted(false, true, true))
     {
+        // 向客户端发送技能释放失败，已经有一个正在释放中的技能。
         SendCastResult(SPELL_FAILED_SPELL_IN_PROGRESS);
+        // 调用技能释放完成
         finish(false);
         return SPELL_FAILED_SPELL_IN_PROGRESS;
     }
-
+    // 如果技能释放者该技能被禁用
     if (DisableMgr::IsDisabledFor(DISABLE_TYPE_SPELL, m_spellInfo->Id, m_caster))
     {
+        // 向客户端发送技能释放失败，技能被禁用。
         SendCastResult(SPELL_FAILED_SPELL_UNAVAILABLE);
         finish(false);
         return SPELL_FAILED_SPELL_UNAVAILABLE;
@@ -2989,8 +2997,9 @@ SpellCastResult Spell::prepare(SpellCastTargets const* targets, Aura* triggeredB
 
     // Fill cost data
     m_powerCost = CalculatePowerCost(m_spellInfo, m_caster, this, m_CastItem);
-
+    // 获取技能释放结果
     SpellCastResult result = CheckCast(true);
+    // 如果技能释放失败，并且不是自动释放的技能
     if (result != SPELL_CAST_OK && !IsAutoRepeat())         // always cast autorepeat dummy for triggering
     {
         if (triggeredByAura)
@@ -3004,6 +3013,7 @@ SpellCastResult Spell::prepare(SpellCastTargets const* targets, Aura* triggeredB
     }
 
     // Roll chance to cast from spell list (must be after cast checks, this is why its here)
+    // 如果技能有释放成功几率
     if (chance)
     {
         if (!roll_chance_i(chance))
@@ -3012,7 +3022,7 @@ SpellCastResult Spell::prepare(SpellCastTargets const* targets, Aura* triggeredB
             return SPELL_FAILED_TRY_AGAIN;
         }
     }
-
+    // 更新技能状态为准备释放状态
     m_spellState = SPELL_STATE_PREPARING;
 
     // Prepare data for triggers
@@ -3057,27 +3067,30 @@ SpellCastResult Spell::prepare(SpellCastTargets const* targets, Aura* triggeredB
             cast(true);
         }
     }
-
+    // 返回技能释放成功
     return SPELL_CAST_OK;
 }
 
 void Spell::cancel()
 {
+    // 如果法术已经完成，返回
     if (m_spellState == SPELL_STATE_FINISHED)
     {
         return;
     }
 
-    // channeled spells don't display interrupted message even if they are interrupted, possible other cases with no "Interrupted" message
-    bool sendInterrupt = IsChanneledSpell(m_spellInfo) ? false : true;
+    // 引导法术（例如法师的暴风雪）被打断不需要发送被打断显示信息，其他法术发送被打断信息。
+    bool sendInterrupt = !IsChanneledSpell(m_spellInfo);
 
     m_autoRepeat = false;
     switch (m_spellState)
     {
+        // 正在准备释放法术中（非引导法术，比如法师的大火球）
         case SPELL_STATE_PREPARING:
+        {   
             CancelGlobalCooldown();
-
             //(no break)
+        }
         case SPELL_STATE_DELAYED:
         {
             SendInterrupted(SPELL_FAILED_INTERRUPTED);
@@ -3712,11 +3725,12 @@ void Spell::update(uint32 difftime)
 
 void Spell::finish(bool ok)
 {
+    // 如果没有施法者，返回
     if (!m_caster)
     {
         return;
     }
-
+    // 如果法术状态为已完成，
     if (m_spellState == SPELL_STATE_FINISHED)
     {
         return;
@@ -3898,6 +3912,7 @@ void Spell::SendCastResult(Player* caster, SpellEntry const* spellInfo, SpellCas
 
 void Spell::SendSpellStart()
 {
+    // 如果不需要通知客户端技能读条，直接返回
     if (!IsNeedSendToClient())
     {
         return;
@@ -7646,13 +7661,13 @@ SpellEvent::~SpellEvent()
 
 bool SpellEvent::Execute(uint64 e_time, uint32 p_time)
 {
-    // update spell if it is not finished
+    // 如果技能不是完成状态，更新技能
     if (m_Spell->getState() != SPELL_STATE_FINISHED)
     {
         m_Spell->update(p_time);
     }
 
-    // check spell state to process
+    // 根据技能状态进行处理
     switch (m_Spell->getState())
     {
         case SPELL_STATE_FINISHED:
@@ -7729,7 +7744,8 @@ bool SpellEvent::Execute(uint64 e_time, uint32 p_time)
 
     // spell processing not complete, plan event on the next update interval
     m_Spell->GetCaster()->m_Events.AddEvent(this, e_time + 1, false);
-    return false;                                           // event not complete
+    // Event未完成
+    return false;
 }
 
 void SpellEvent::Abort(uint64 /*e_time*/)
@@ -7972,6 +7988,7 @@ void Spell::TriggerGlobalCooldown()
     // global cooldown can't leave range 1..1.5 secs (if it it)
     // exist some spells (mostly not player directly casted) that have < 1 sec and > 1.5 sec global cooldowns
     // but its as test show not affected any spell mods.
+    // 大部分职业公共CD默认1.5秒
     if (gcd >= 1000 && gcd <= 1500)
     {
         // apply haste rating
@@ -8000,24 +8017,29 @@ void Spell::TriggerGlobalCooldown()
 
 void Spell::CancelGlobalCooldown()
 {
+    // 如果公共CD计数为0，直接返回
     if (!m_spellInfo->StartRecoveryTime)
     {
         return;
     }
 
     // cancel global cooldown when interrupting current cast
+    // 如果施法者当前释放的普通法术不是本法术实体，直接返回
     if (m_caster->GetCurrentSpell(CURRENT_GENERIC_SPELL) != this)
     {
         return;
     }
 
     // global cooldown have only player or controlled units
+    // 公共CD作用于玩家或者玩家控制的单位
     if (m_caster->GetCharmInfo())
     {
+        // 如果施法者是玩家控制的单位
         m_caster->GetCharmInfo()->GetGlobalCooldownMgr().CancelGlobalCooldown(m_spellInfo);
     }
     else if (m_caster->GetTypeId() == TYPEID_PLAYER)
     {
+        // 如果施法者是玩家
         ((Player*)m_caster)->GetGlobalCooldownMgr().CancelGlobalCooldown(m_spellInfo);
     }
 }

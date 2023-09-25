@@ -32,32 +32,35 @@ EventProcessor::EventProcessor()
 
 EventProcessor::~EventProcessor()
 {
+    // 退出时强制清理所有Event
     KillAllEvents(true);
 }
 
 void EventProcessor::Update(uint32 p_time)
 {
-    // update time
+    // 更新时间
     m_time += p_time;
 
-    // main event loop
+    // 循环队列，取出其中到期的Event
     EventList::iterator i;
     while (((i = m_events.begin()) != m_events.end()) && i->first <= m_time)
     {
-        // get and remove event from queue
+        // 获取Event并从队列中删除
         BasicEvent* Event = i->second;
         m_events.erase(i);
-
+        // 如果Event不需要终止
         if (!Event->to_Abort)
         {
+            // 回调Execute函数后，删除Event
             if (Event->Execute(m_time, p_time))
             {
-                // completely destroy event if it is not re-added
+                // 如果回调Event的Execute函数返回true，删除该Event
                 delete Event;
             }
         }
         else
         {
+            // 回调Abort函数后删除Event
             Event->Abort(m_time);
             delete Event;
         }
@@ -66,17 +69,18 @@ void EventProcessor::Update(uint32 p_time)
 
 void EventProcessor::KillAllEvents(bool force)
 {
-    // prevent event insertions
+    // 阻止插入Event
     m_aborting = true;
 
-    // first, abort all existing events
+    // 终止队列中的Event
     for (EventList::iterator i = m_events.begin(); i != m_events.end();)
     {
         EventList::iterator i_old = i;
         ++i;
-
+        // 首先终止Event，并回调to_Abort函数
         i_old->second->to_Abort = true;
         i_old->second->Abort(m_time);
+        // 如果使用了强制结束或者Event可以被删除
         if (force || i_old->second->IsDeletable())
         {
             delete i_old->second;

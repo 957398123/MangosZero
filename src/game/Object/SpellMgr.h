@@ -571,6 +571,11 @@ inline bool IsSpellRequiresRangedAP(SpellEntry const* spellInfo)
 
 SpellCastResult GetErrorAtShapeshiftedCast(SpellEntry const* spellInfo, uint32 form);
 
+/**
+ * @brief 判断该技能是否为引导法术
+ * @param spellInfo 技能信息
+ * @return 
+*/
 inline bool IsChanneledSpell(SpellEntry const* spellInfo)
 {
     return spellInfo->HasAttribute(SPELL_ATTR_EX_CHANNELED_1) || spellInfo->HasAttribute(SPELL_ATTR_EX_CHANNELED_2);

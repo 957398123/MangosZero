@@ -194,14 +194,14 @@ inline ByteBuffer& operator>> (ByteBuffer& buf, SpellCastTargetsReader const& ta
 
 enum SpellState
 {
-    SPELL_STATE_CREATED     = 0,   // just created
+    SPELL_STATE_CREATED     = 0,   // 技能刚刚创建
     SPELL_STATE_PREPARING   = 1,   // cast time delay period, non channeled spell
     SPELL_STATE_CASTING     = 2,   // channeled time period spell casting state
     SPELL_STATE_DELAYED     = 3,   // spell is delayed (cast time pushed back) TODO: need to be implemented properly
     SPELL_STATE_TRAVELING   = 4,   // spell casted but need time to hit target(s)
     SPELL_STATE_LANDING     = 5,   // processing the effects
     SPELL_STATE_CHANNELING  = 6,   // channeled time period spell casting state
-    SPELL_STATE_FINISHED    = 7,   // cast finished to success or fail
+    SPELL_STATE_FINISHED    = 7,   // 技能释放完成或者释放失败
 };
 
 enum SpellTargets
@@ -319,13 +319,28 @@ class Spell
 
         Spell(Unit* caster, SpellEntry const* info, bool triggered, ObjectGuid originalCasterGUID = ObjectGuid(), SpellEntry const* triggeredBy = NULL);
         ~Spell();
-
+        /**
+         * @brief 准备释放技能
+         * @param targets 技能目标
+         * @param triggeredByAura 是否由光环触发，默认否
+         * @param chance 法术触发概率，默认100%
+         * @return 
+        */
         SpellCastResult prepare(SpellCastTargets const* targets, Aura* triggeredByAura = NULL, uint32 chance = 0);
-
+        /**
+         * @brief 取消技能释放
+        */
         void cancel();
-
+        /**
+         * @brief 更新技能
+         * @param difftime 时间间隔 
+        */
         void update(uint32 difftime);
         void cast(bool skipCheck = false);
+        /**
+         * @brief 完成技能释放
+         * @param ok 
+        */
         void finish(bool ok = true);
         void TakePower();
         void TakeAmmo();
@@ -368,6 +383,9 @@ class Spell
 
         static void  SendCastResult(Player* caster, SpellEntry const* spellInfo, SpellCastResult result);
         void SendCastResult(SpellCastResult result);
+        /**
+         * @brief 给客户端发送显示技能读条信息
+        */
         void SendSpellStart();
         void SendSpellGo();
         void SendSpellCooldown();
@@ -385,6 +403,9 @@ class Spell
         SpellEntry const* m_triggeredBySpellInfo;
         int32 m_currentBasePoints[MAX_EFFECT_INDEX];        // cache SpellEntry::CalculateSimpleValue and use for set custom base points
         Item* m_CastItem;
+        /**
+         * @brief 技能释放目标
+        */
         SpellCastTargets m_targets;
 
         bool IsTriggered() const {return m_IsTriggeredSpell;}
@@ -452,12 +473,20 @@ class Spell
     protected:
         bool HasGlobalCooldown();
         void TriggerGlobalCooldown();
+        /**
+         * @brief 取消技能公共CD
+        */
         void CancelGlobalCooldown();
 
         void SendLoot(ObjectGuid guid, LootType loottype, LockType lockType);
         bool IgnoreItemRequirements() const;                // some item use spells have unexpected reagent data
+        /**
+         * @brief 更新实际施法者
+        */
         void UpdateOriginalCasterPointer();
-
+        /**
+         * @brief 施法者
+        */
         Unit* m_caster;
 
         ObjectGuid m_originalCasterGUID;                    // real source of cast (aura caster/etc), used for spell targets selection
@@ -876,9 +905,22 @@ class SpellEvent : public BasicEvent
     public:
         SpellEvent(Spell* spell);
         virtual ~SpellEvent();
-
+        /**
+         * @brief 技能Event处理
+         * @param e_time Event加入队列时间
+         * @param p_time 更新间隔
+         * @return 
+        */
         virtual bool Execute(uint64 e_time, uint32 p_time) override;
+        /**
+         * @brief 技能Event终止
+         * @param e_time 
+        */
         virtual void Abort(uint64 e_time) override;
+        /**
+         * @brief 技能Event是否能够移除
+         * @return 
+        */
         virtual bool IsDeletable() const override;
     protected:
         Spell* m_Spell;

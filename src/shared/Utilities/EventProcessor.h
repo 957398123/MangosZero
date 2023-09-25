@@ -30,7 +30,7 @@
 #include <map>
 
 /**
- * @brief Note. All times are in milliseconds here.
+ * @brief 所有时间单位为毫秒
  *
  */
 class BasicEvent
@@ -56,33 +56,41 @@ class BasicEvent
 
 
         /**
-         * @brief this method executes when the event is triggered
+         * @brief 这个函数在Event被触发的时候执行
          *
-         * @param uint64 e_time is execution time
-         * @param uint32 p_time is update interval
-         * @return bool return false if event does not want to be deleted
+         * @param uint64 e_time 开始执行时间
+         * @param uint32 p_time 更新间隔
+         * @return bool 如果不想要删除Event，返回false
          */
         virtual bool Execute(uint64 /*e_time*/, uint32 /*p_time*/) { return true; }
 
         /**
-         * @brief this event can be safely deleted
+         * @brief Event能否被安全的删除
          *
          * @return bool
          */
         virtual bool IsDeletable() const { return true; }
 
         /**
-         * @brief this method executes when the event is aborted
+         * @brief 这个函数在Event终止时执行
          *
          * @param uint64
          */
         virtual void Abort(uint64 /*e_time*/) {}
 
-        bool to_Abort;                                      /**< set by externals when the event is aborted, aborted events don't execute and get Abort call when deleted */
+        /**
+         * @brief 是否终止Event，终止时调用Abort函数
+        */
+        bool to_Abort;
 
-        // these can be used for time offset control
-        uint64 m_addTime;                                   /**< time when the event was added to queue, filled by event handler */
-        uint64 m_execTime;                                  /**< planned time of next execution, filled by event handler */
+        /**
+         * @brief Event加入处理队列的时间
+        */
+        uint64 m_addTime;
+        /**
+         * @brief Event触发时间
+        */
+        uint64 m_execTime;
 };
 
 /**
@@ -111,38 +119,43 @@ class EventProcessor
         ~EventProcessor();
 
         /**
-         * @brief
-         *
-         * @param p_time
-         */
-        void Update(uint32 p_time);
+         * @brief 更新EventProcessor的时间
+         * @param p_time 增加的时间 
+        */
+        void Update(uint32 p_time); 
         /**
-         * @brief
-         *
-         * @param force
-         */
+         * @brief 关闭所有事件
+         * @param 是否强制关闭
+        */
         void KillAllEvents(bool force);
         /**
-         * @brief
-         *
-         * @param Event
-         * @param e_time
-         * @param set_addtime
-         */
+         * @brief 添加Event到处理队列
+         * @param Event 要处理的Event
+         * @param e_time Event触发时间
+         * @param set_addtime 是否设置Event加入时间
+        */
         void AddEvent(BasicEvent* Event, uint64 e_time, bool set_addtime = true);
         /**
-         * @brief
-         *
-         * @param t_offset
-         * @return uint64
-         */
+         * @brief 计算时间
+         * @param t_offset 要增加的时间
+         * @return 当前时间+增加的时间
+        */
         uint64 CalculateTime(uint64 t_offset);
 
     protected:
 
-        uint64 m_time; /**< TODO */
-        EventList m_events; /**< TODO */
-        bool m_aborting; /**< TODO */
+        /**
+         * @brief 当前时间
+        */
+        uint64 m_time;
+        /**
+         * @brief Event处理队列
+        */
+        EventList m_events;
+        /**
+         * @brief 是否阻止Event插入
+        */
+        bool m_aborting;
 };
 
 #endif

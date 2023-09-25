@@ -2531,7 +2531,9 @@ class Player : public Unit
         PlayerMails m_mail;
         PlayerSpellMap m_spells;
         SpellCooldowns m_spellCooldowns;
-
+        /**
+         * @brief 公共CD管理器
+        */
         GlobalCooldownMgr m_GlobalCooldownMgr;
 
         ActionButtonList m_actionButtons;
