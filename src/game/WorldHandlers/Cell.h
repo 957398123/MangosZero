@@ -43,8 +43,13 @@ struct CellArea
         begin_cell = low_bound;
         end_cell = high_bound;
     }
-
+    /**
+     * @brief cell区域最小边界
+    */
     CellPair low_bound;
+    /**
+     * @brief cell区域最大边界
+    */
     CellPair high_bound;
 };
 
@@ -113,6 +118,13 @@ struct Cell
         template<class T, class CONTAINER> void Visit(const CellPair& cellPair, TypeContainerVisitor<T, CONTAINER> &visitor, Map& m, float x, float y, float radius) const;
         template<class T, class CONTAINER> void Visit(const CellPair& cellPair, TypeContainerVisitor<T, CONTAINER> &visitor, Map& m, const WorldObject& obj, float radius) const;
 
+        /**
+         * @brief 根据坐标和半径计算所占格子区域
+         * @param x 坐标x
+         * @param y 坐标y
+         * @param radius 半径
+         * @return 
+        */
         static CellArea CalculateCellArea(float x, float y, float radius);
 
         template<class T> static void VisitGridObjects(const WorldObject* obj, T& visitor, float radius, bool dont_load = true);

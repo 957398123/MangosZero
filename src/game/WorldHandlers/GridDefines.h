@@ -175,6 +175,12 @@ namespace MaNGOS
         return Compute<GridPair, CENTER_GRID_ID>(x, y, CENTER_GRID_OFFSET, SIZE_OF_GRIDS);
     }
 
+    /**
+     * @brief 将世界坐标转换为cell坐标
+     * @param x 坐标x
+     * @param y 坐标y
+     * @return cell坐标
+    */
     inline CellPair ComputeCellPair(float x, float y)
     {
         return Compute<CellPair, CENTER_GRID_CELL_ID>(x, y, CENTER_GRID_CELL_OFFSET, SIZE_OF_GRID_CELL);

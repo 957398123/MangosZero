@@ -332,13 +332,13 @@ class NGrid
             getGridType(x, y).RemoveWorldObject(obj);
         }
 
-        template<class T, class TT>
         /**
-         * @brief
-         *
-         * @param TypeContainerVisitor<T
-         * @param visitor
-         */
+         * @brief 
+         * @tparam T 
+         * @tparam TT 
+         * @param visitor 
+        */
+        template<class T, class TT>
         void Visit(TypeContainerVisitor<T, TT>& visitor)
         {
             for (uint32 x = 0; x < N; ++x)
@@ -348,15 +348,15 @@ class NGrid
                 }
         }
 
-        template<class T, class TT>
         /**
-         * @brief
-         *
-         * @param x
-         * @param y
-         * @param TypeContainerVisitor<T
-         * @param visitor
-         */
+         * @brief 
+         * @tparam T 
+         * @tparam TT 
+         * @param x 
+         * @param y 
+         * @param visitor 
+        */
+        template<class T, class TT>
         void Visit(const uint32& x, const uint32& y, TypeContainerVisitor<T, TT>& visitor)
         {
             getGridType(x, y).Visit(visitor);

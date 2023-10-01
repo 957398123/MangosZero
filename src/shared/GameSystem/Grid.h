@@ -110,12 +110,22 @@ class Grid
             return i_gridContainer.template remove<SPECIFIC_OBJECT>(obj);
         }
 
+        /**
+         * @brief 
+         * @tparam T 
+         * @param visitor 
+        */
         template<class T>
         void Visit(TypeContainerVisitor<T, GRID_CONTAINER>& visitor)
         {
             visitor.Visit(i_gridContainer);
         }
 
+        /**
+         * @brief 
+         * @tparam T 
+         * @param visitor 
+        */
         template<class T>
         void Visit(TypeContainerVisitor<T, WORLD_CONTAINER>& visitor)
         {

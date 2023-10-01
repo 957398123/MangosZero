@@ -701,7 +701,9 @@ class WorldObject : public Object
         void SetLocationInstanceId(uint32 _instanceId) { m_InstanceId = _instanceId; }
 
         virtual void StopGroupLoot() {}
-
+        /**
+         * @brief 游戏对象名称
+        */
         std::string m_name;
 
     private:

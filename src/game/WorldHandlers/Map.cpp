@@ -515,25 +515,28 @@ void Map::VisitNearbyCellsOf(WorldObject* obj,
                              TypeContainerVisitor<MaNGOS::ObjectUpdater, GridTypeMapContainer> &gridVisitor,
                              TypeContainerVisitor<MaNGOS::ObjectUpdater, WorldTypeMapContainer> &worldVisitor)
 {
+    // 如果世界对象坐标无效，忽略处理。
     if (!obj->IsPositionValid())
     {
         return;
     }
-
-    // lets update mobs/objects in ALL visible cells around player!
+    // 获取世界对象可视范围区域
     CellArea area = Cell::CalculateCellArea(obj->GetPositionX(), obj->GetPositionY(), GetVisibilityDistance());
-
+    // 遍历该区域
     for (uint32 x = area.low_bound.x_coord; x <= area.high_bound.x_coord; ++x)
     {
         for (uint32 y = area.low_bound.y_coord; y <= area.high_bound.y_coord; ++y)
         {
-            // marked cells are those that have been visited
-            // don't visit the same cell twice
+            // 获取当前cell标识
             uint32 cell_id = (y * TOTAL_NUMBER_OF_CELLS_PER_MAP) + x;
+            // 如果未更新，进行更新
             if (!isCellMarked(cell_id))
             {
+                // 标记cell被更新
                 markCell(cell_id);
+                // 获取当前cell坐标
                 CellPair pair(x, y);
+                // 创建cell
                 Cell cell(pair);
                 cell.SetNoCreate();
                 Visit(cell, gridVisitor);
@@ -583,9 +586,9 @@ void Map::Update(const uint32& t_diff)
 
     MaNGOS::ObjectUpdater updater(t_diff);
     // for creature
-    TypeContainerVisitor<MaNGOS::ObjectUpdater, GridTypeMapContainer  > grid_object_update(updater);
+    TypeContainerVisitor<MaNGOS::ObjectUpdater, GridTypeMapContainer> grid_object_update(updater);
     // for pets
-    TypeContainerVisitor<MaNGOS::ObjectUpdater, WorldTypeMapContainer > world_object_update(updater);
+    TypeContainerVisitor<MaNGOS::ObjectUpdater, WorldTypeMapContainer> world_object_update(updater);
 
     // the player iterator is stored in the map object
     // to make sure calls to Map::Remove don't invalidate it
@@ -593,11 +596,13 @@ void Map::Update(const uint32& t_diff)
     {
         Player* plr = m_mapRefIter->getSource();
 
+        // 玩家不存在或者玩家已经登出游戏，忽略
         if (!plr || !plr->IsInWorld())
         {
             continue;
         }
 
+        // 更新玩家可视范围内信息（AOI处理）
         VisitNearbyCellsOf(plr, grid_object_update, world_object_update);
 
         // Collect and remove references to creatures too far away from player's m_HostileRefManager
@@ -684,7 +689,7 @@ void Map::Update(const uint32& t_diff)
     {
         i_data->Update(t_diff);
     }
-
+    // 更新天气系统
     m_weatherSystem->UpdateWeathers(t_diff);
 }
 

@@ -41,6 +41,7 @@ class TypeContainerVisitor
         TypeContainerVisitor(VISITOR& v) : i_visitor(v){}
         void Visit(CONTAINER& c)
         {
+            // µ÷ÓÃacceptº¯Êý
             c.template accept<VISITOR>(std::forward<VISITOR>(i_visitor));
         }
         void Visit(const CONTAINER& c) const

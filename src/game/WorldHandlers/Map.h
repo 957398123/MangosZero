@@ -197,7 +197,16 @@ class Map : public GridRefManager<NGridType>
         void UpdateObjectVisibility(WorldObject* obj, Cell cell, CellPair cellpair);
 
         void resetMarkedCells() { marked_cells.reset(); }
+        /**
+         * @brief 地图cell是否被更新
+         * @param pCellId cell标识
+         * @return 
+        */
         bool isCellMarked(uint32 pCellId) { return marked_cells.test(pCellId); }
+        /**
+         * @brief 标记cell已被更新
+         * @param pCellId cell标识
+        */
         void markCell(uint32 pCellId) { marked_cells.set(pCellId); }
 
         bool HavePlayers() const { return !m_mapRefManager.isEmpty(); }
@@ -326,13 +335,24 @@ class Map : public GridRefManager<NGridType>
             return i_grids[x][y];
         }
 
+        /**
+         * @brief 更新obj可视范围信息
+         * @param obj 
+         * @param gridVisitor 
+         * @param worldVisitor 
+        */
         void VisitNearbyCellsOf(WorldObject* obj,
                                 TypeContainerVisitor<MaNGOS::ObjectUpdater, GridTypeMapContainer> &gridVisitor,
                                 TypeContainerVisitor<MaNGOS::ObjectUpdater, WorldTypeMapContainer> &worldVisitor);
 
         bool isGridObjectDataLoaded(uint32 x, uint32 y) const { return getNGrid(x, y)->isGridObjectDataLoaded(); }
         void setGridObjectDataLoaded(bool pLoaded, uint32 x, uint32 y) { getNGrid(x, y)->setGridObjectDataLoaded(pLoaded); }
-
+        /**
+         * @brief 设置grid
+         * @param grid 
+         * @param x 
+         * @param y 
+        */
         void setNGrid(NGridType* grid, uint32 x, uint32 y);
         void ScriptsProcess();
 
@@ -364,6 +384,9 @@ class Map : public GridRefManager<NGridType>
         TerrainInfo* const m_TerrainData;
         bool m_bLoadedGrids[MAX_NUMBER_OF_GRIDS][MAX_NUMBER_OF_GRIDS];
 
+        /**
+         * @brief 地图cell标记
+        */
         std::bitset<TOTAL_NUMBER_OF_CELLS_PER_MAP* TOTAL_NUMBER_OF_CELLS_PER_MAP> marked_cells;
 
         std::set<WorldObject*> i_objectsToRemove;
@@ -472,10 +495,12 @@ Map::Visit(const Cell& cell, TypeContainerVisitor<T, CONTAINER>& visitor)
     const uint32 y = cell.GridY();
     const uint32 cell_x = cell.CellX();
     const uint32 cell_y = cell.CellY();
-
+    // 如果cell已经创建，并且对应的grid已经加载
     if (!cell.NoCreate() || loaded(GridPair(x, y)))
     {
+        // 确保grid被加载
         EnsureGridLoaded(cell);
+        // 调用grid的Visit函数
         getNGrid(x, y)->Visit(cell_x, cell_y, visitor);
     }
 }

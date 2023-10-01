@@ -111,7 +111,7 @@ class WaypointMovementGenerator<Creature>
  * and hence generates ground and activities for the player.
  */
 class FlightPathMovementGenerator
-    : public MovementGeneratorMedium< Player, FlightPathMovementGenerator >,
+    : public MovementGeneratorMedium<Player, FlightPathMovementGenerator >,
       public PathMovementBase<Player, TaxiPathNodeList const*>
 {
     public:
