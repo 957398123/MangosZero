@@ -380,26 +380,27 @@ void Unit::Update(uint32 update_diff, uint32 p_time)
 
 bool Unit::UpdateMeleeAttackingState()
 {
-    // 获取当前攻击对象
+    // 获取当前交战单位
     Unit* victim = getVictim();
     if (!victim || IsNonMeleeSpellCasted(false))
     {
         return false;
     }
-    // 如果普通攻击处于CD中，直接返回。
+    // 如果近战攻击处于CD中，直接返回。
     if (!isAttackReady(BASE_ATTACK) && !(isAttackReady(OFF_ATTACK) && haveOffhandWeapon()))
     {
         return false;
     }
 
     uint8 swingError = 0;
+    // 如果交战单位超过攻击范围，复位攻击间隔。
     if (!CanReachWithMeleeAttack(victim))
     {
         setAttackTimer(BASE_ATTACK, 100);
         setAttackTimer(OFF_ATTACK, 100);
         swingError = 1;
     }
-    // 120 degrees of radiant range
+    // 如果攻击时未面对交战单位，复位攻击间隔。
     else if (!HasInArc(2 * M_PI_F / 3, victim))
     {
         setAttackTimer(BASE_ATTACK, 100);
@@ -408,44 +409,55 @@ bool Unit::UpdateMeleeAttackingState()
     }
     else
     {
+        // 如果主手可以攻击
         if (isAttackReady(BASE_ATTACK))
         {
-            // prevent base and off attack in same time, delay attack at 0.2 sec
+            // 如果装备了副手武器
             if (haveOffhandWeapon())
             {
+                // 如果副手武器CD小于0.2秒，复位为0.2秒。
                 if (getAttackTimer(OFF_ATTACK) < ATTACK_DISPLAY_DELAY)
                 {
                     setAttackTimer(OFF_ATTACK, ATTACK_DISPLAY_DELAY);
                 }
             }
+            // 更新主手攻击
             AttackerStateUpdate(victim, BASE_ATTACK);
+            // 重置主手武器CD
             resetAttackTimer(BASE_ATTACK);
         }
+        // 如果副手可以攻击
         if (haveOffhandWeapon() && isAttackReady(OFF_ATTACK))
         {
-            // prevent base and off attack in same time, delay attack at 0.2 sec
+            // 获取主手武器CD
             uint32 base_att = getAttackTimer(BASE_ATTACK);
+            // 如果主手武器CD小于0.2秒，复位为0.2秒。
             if (base_att < ATTACK_DISPLAY_DELAY)
             {
                 setAttackTimer(BASE_ATTACK, ATTACK_DISPLAY_DELAY);
             }
-            // do attack
+            // 更新副手攻击
             AttackerStateUpdate(victim, OFF_ATTACK);
+            // 重置副手武器CD
             resetAttackTimer(OFF_ATTACK);
         }
     }
-
+    // 获取当前单位类型
     Player* player = (GetTypeId() == TYPEID_PLAYER ? (Player*)this : NULL);
+    // 如果是玩家，并且攻击状态码跟上一次不一致，发送消息给客户端。
     if (player && swingError != player->LastSwingErrorMsg())
     {
         if (swingError == 1)
         {
+            // 发送超出攻击范围消息
             player->SendAttackSwingNotInRange();
         }
         else if (swingError == 2)
         {
+            // 发送必须面对目标消息
             player->SendAttackSwingBadFacingAttack();
         }
+        // 设置攻击状态码
         player->SwingErrorMsg(swingError);
     }
 
@@ -1947,7 +1959,7 @@ void Unit::DealMeleeDamage(CalcDamageInfo* damageInfo, bool durabilityLoss)
     {
         return;
     }
-
+    // 如果被攻击单位死亡、处于飞行旅行状态（鸟点飞行中）、回避模式，忽略处理。
     if (!pVictim->IsAlive() || pVictim->IsTaxiFlying() || (pVictim->GetTypeId() == TYPEID_UNIT && ((Creature*)pVictim)->IsInEvadeMode()))
     {
         return;
@@ -1956,47 +1968,58 @@ void Unit::DealMeleeDamage(CalcDamageInfo* damageInfo, bool durabilityLoss)
     // Hmmmm dont like this emotes client must by self do all animations
     if (damageInfo->HitInfo & HITINFO_CRITICALHIT)
     {
+        // 显示被攻击者被暴击动画（广播给被攻击者所在Cell区域的玩家）
         pVictim->HandleEmoteCommand(EMOTE_ONESHOT_WOUNDCRITICAL);
     }
+    // 如果伤害有被格挡但是被攻击者不处于格挡状态，广播被攻击者格挡动画。
     if (damageInfo->blocked_amount && damageInfo->TargetState != VICTIMSTATE_BLOCKS)
     {
         pVictim->HandleEmoteCommand(EMOTE_ONESHOT_PARRYSHIELD);
     }
 
-    // This seems to reduce the victims time until next attack if your attack was parried
+    // 如果攻击被招架
     if (damageInfo->TargetState == VICTIMSTATE_PARRY)
     {
+        // 如果生物能够在招架时进行反击
         if (pVictim->GetTypeId() != TYPEID_UNIT ||
             !(((Creature*)pVictim)->GetCreatureInfo()->ExtraFlags & CREATURE_FLAG_EXTRA_NO_PARRY_HASTEN))
         {
-            // Get attack timers
+            // 获取主手武器和副手武器CD
             float offtime = float(pVictim->getAttackTimer(OFF_ATTACK));
             float basetime = float(pVictim->getAttackTimer(BASE_ATTACK));
-            // Reduce attack time
+            // 如果装备了副手武器并且副手武器CD比主手武器CD少
             if (pVictim->haveOffhandWeapon() && offtime < basetime)
             {
+                // 获取副手武器攻速
                 float percent20 = pVictim->GetAttackTime(OFF_ATTACK) * 0.20f;
                 float percent60 = 3.0f * percent20;
+                // 如果副手武器CD在攻速20%至60%之间
                 if (offtime > percent20 && offtime <= percent60)
                 {
+                    // 设置副手武器CD为攻速20%
                     pVictim->setAttackTimer(OFF_ATTACK, uint32(percent20));
                 }
+                // 如果副手武器CD大于攻速60%
                 else if (offtime > percent60)
                 {
+                    // 减去副手武器攻速40%CD
                     offtime -= 2.0f * percent20;
                     pVictim->setAttackTimer(OFF_ATTACK, uint32(offtime));
                 }
             }
             else
             {
+                // 获取主手武器攻速
                 float percent20 = pVictim->GetAttackTime(BASE_ATTACK) * 0.20f;
                 float percent60 = 3.0f * percent20;
                 if (basetime > percent20 && basetime <= percent60)
                 {
+                    // 设置主手武器CD为攻速20%
                     pVictim->setAttackTimer(BASE_ATTACK, uint32(percent20));
                 }
                 else if (basetime > percent60)
                 {
+                    // 减去主手武器攻速40%CD
                     basetime -= 2.0f * percent20;
                     pVictim->setAttackTimer(BASE_ATTACK, uint32(basetime));
                 }
@@ -2006,6 +2029,7 @@ void Unit::DealMeleeDamage(CalcDamageInfo* damageInfo, bool durabilityLoss)
 
     // Call default DealDamage
     CleanDamage cleanDamage(damageInfo->cleanDamage, damageInfo->attackType, damageInfo->hitOutCome);
+    // 处理白字武器伤害
     DealDamage(pVictim, damageInfo->damage, &cleanDamage, DIRECT_DAMAGE, SpellSchoolMask(damageInfo->damageSchoolMask), NULL, durabilityLoss);
 
     // If this is a creature and it attacks from behind it has a probability to daze it's victim
@@ -2486,45 +2510,51 @@ void Unit::AttackerStateUpdate(Unit* pVictim, WeaponAttackType attType, bool ext
 
     uint32 extraAttacks = m_extraAttacks;
 
-    // melee attack spell casted at main hand attack only
+    // 近战攻击法术只能在主手攻击时释放（近战法术替代普通攻击，比如战士的英勇打击）
     if (attType == BASE_ATTACK && m_currentSpells[CURRENT_MELEE_SPELL])
     {
+        // 释放近战法术
         m_currentSpells[CURRENT_MELEE_SPELL]->cast();
 
         // not recent extra attack only at any non extra attack (melee spell case)
         if (!extra && extraAttacks)
         {
+            // 处理额外攻击
             HandleProcExtraAttackFor(pVictim);
         }
-
+        // 直接返回，不触发普通攻击
         return;
     }
 
     RemoveAurasWithInterruptFlags(AURA_INTERRUPT_FLAG_MELEE_ATTACK);
-
+    // 计算伤害
     CalcDamageInfo damageInfo;
+    // 根据攻击类型计算伤害
     CalculateMeleeDamage(pVictim, &damageInfo, attType);
-    // Send log damage message to client
+    // 伤害模型处理（比如生物死亡就不造成伤害）
     DealDamageMods(pVictim, damageInfo.damage, &damageInfo.absorb);
+    // 将伤害信息广播给地图其他玩家
     SendAttackStateUpdate(&damageInfo);
     ProcDamageAndSpell(damageInfo.target, damageInfo.procAttacker, damageInfo.procVictim, damageInfo.procEx, damageInfo.damage, damageInfo.attackType);
+    // 处理攻击伤害（计算耐久）
     DealMeleeDamage(&damageInfo, true);
-
+    // 日志输出
     DEBUG_FILTER_LOG(LOG_FILTER_COMBAT, "AttackerStateUpdate: %s attacked %s for %u dmg, absorbed %u, blocked %u, resisted %u.",
                      GetGuidStr().c_str(), pVictim->GetGuidStr().c_str(), damageInfo.damage, damageInfo.absorb, damageInfo.blocked_amount, damageInfo.resist);
 
-    // Owner of pet enters combat upon pet attack
+    // 宠物主人在宠物发起攻击时也进入战斗
     if (Unit* owner = GetOwner())
     {
         owner->AddThreat(pVictim);
         owner->SetInCombatWith(pVictim);
+        // 宠物主人加入被攻击者的仇恨列表
         pVictim->SetInCombatWith(owner);
     }
 
-    // if damage pVictim call AI reaction
+    // 触发交战者的AI处理，比如一个生物攻击了另一个生物（玩家除外），被攻击者触发AI处理。
     pVictim->AttackedBy(this);
 
-    // extra attack only at any non extra attack (normal case)
+    // 处理额外攻击
     if (!extra && extraAttacks)
     {
         HandleProcExtraAttackFor(pVictim);
@@ -2533,6 +2563,7 @@ void Unit::AttackerStateUpdate(Unit* pVictim, WeaponAttackType attType, bool ext
 
 void Unit::HandleProcExtraAttackFor(Unit* victim)
 {
+    // 处理法术设置的额外攻击
     while (m_extraAttacks)
     {
         --m_extraAttacks;

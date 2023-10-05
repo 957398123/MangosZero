@@ -229,13 +229,13 @@ enum VictimState
 {
     VICTIMSTATE_UNAFFECTED     = 0,                         // seen in relation with HITINFO_MISS
     VICTIMSTATE_NORMAL         = 1,
-    VICTIMSTATE_DODGE          = 2,
-    VICTIMSTATE_PARRY          = 3,
-    VICTIMSTATE_INTERRUPT      = 4,
-    VICTIMSTATE_BLOCKS         = 5,
-    VICTIMSTATE_EVADES         = 6,
-    VICTIMSTATE_IS_IMMUNE      = 7,
-    VICTIMSTATE_DEFLECTS       = 8
+    VICTIMSTATE_DODGE          = 2,                         // 躲闪
+    VICTIMSTATE_PARRY          = 3,                         // 招架
+    VICTIMSTATE_INTERRUPT      = 4,                         // 被打断
+    VICTIMSTATE_BLOCKS         = 5,                         // 格挡
+    VICTIMSTATE_EVADES         = 6,                         // 回避（比如怪物无法攻击目标或者脱战跑回原位置的过程中就是该状态）
+    VICTIMSTATE_IS_IMMUNE      = 7,                         // 免疫
+    VICTIMSTATE_DEFLECTS       = 8                          // 偏斜
 };
 
 /**
@@ -254,7 +254,7 @@ enum HitInfo
     HITINFO_MISS                = 0x00000010,
     HITINFO_ABSORB              = 0x00000020,               // plays absorb sound
     HITINFO_RESIST              = 0x00000040,               // resisted atleast some damage
-    HITINFO_CRITICALHIT         = 0x00000080,
+    HITINFO_CRITICALHIT         = 0x00000080,               // 暴击
     HITINFO_UNK8                = 0x00000100,               // wotlk?
     HITINFO_BLOCK               = 0x00000800,               // [ZERO]
     HITINFO_UNK9                = 0x00002000,               // wotlk?
@@ -789,18 +789,30 @@ struct CleanDamage
  */
 struct CalcDamageInfo
 {
-    /// Attacker
+    /**
+     * @brief 攻击者
+    */
     Unit*  attacker;
-    /// Target for damage
+    /**
+     * @brief 被攻击者
+    */
     Unit*  target;
     SpellSchoolMask damageSchoolMask;
-    /// How much damage was actually done
+    /**
+     * @brief 实际伤害
+    */
     uint32 damage;
-    /// How much damage that was absorbed
+    /**
+     * @brief 吸收伤害（比如牧师的盾、法师的盾）
+    */
     uint32 absorb;
-    /// How much of the damage that was resisted
+    /**
+     * @brief 抵抗伤害（针对法术减免伤害）
+    */
     uint32 resist;
-    /// How much of the damage that was blocked
+    /**
+     * @brief 格挡伤害（格挡伤害）
+    */
     uint32 blocked_amount;
     /**
      * Bitmask of the possible HitInfo flags
@@ -813,8 +825,8 @@ struct CalcDamageInfo
      */
     uint32 TargetState;
     /**
-     * Tells how the target was attacked
-     */
+     * @brief 攻击类型
+    */
     WeaponAttackType attackType;
     /**
      * Proc flags of the attacker that should have a chance to trigger, ie: successful
@@ -1295,6 +1307,9 @@ class Unit : public WorldObject
          * @return true if we can reach pVictim with a melee attack
          */
         bool CanReachWithMeleeAttack(Unit const* pVictim, float flat_mod = 0.0f) const;
+        /**
+         * @brief 额外攻击次数
+        */
         uint32 m_extraAttacks;
 
         /**
@@ -2051,7 +2066,8 @@ class Unit : public WorldObject
          */
         void DealMeleeDamage(CalcDamageInfo* damageInfo, bool durabilityLoss);
         /**
-        * Handles all extra attacks set up by a spell
+         * @brief 处理法术设置的额外攻击
+         * @param victim 
         */
         void HandleProcExtraAttackFor(Unit* victim);
         /**

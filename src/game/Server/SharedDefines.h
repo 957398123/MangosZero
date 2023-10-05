@@ -1076,13 +1076,10 @@ enum SpellRangeIndex
 
 enum DamageEffectType
 {
-    /// Used for normal weapon damage (not for class abilities or spells)
-    DIRECT_DAMAGE           = 0,
-    /// spell/class abilities damage
-    SPELL_DIRECT_DAMAGE     = 1,
-    DOT                     = 2,
-    HEAL                    = 3,
-    /// used also in case when damage applied to health but not applied to spell channelInterruptFlags/etc
+    DIRECT_DAMAGE           = 0,                            // 直接伤害（白字普通武器伤害）
+    SPELL_DIRECT_DAMAGE     = 1,                            // 法术伤害（法术/职业技能伤害）
+    DOT                     = 2,                            // 持续伤害
+    HEAL                    = 3,                            // 持续回复
     NODAMAGE                = 4,                            //< used also in case when damage applied to health but not applied to spell channelInterruptFlags/etc
     SELF_DAMAGE_ROGUE_FALL  = 5,                            //< used to avoid rogue loosing stealth on falling damage
     SELF_DAMAGE             = 6

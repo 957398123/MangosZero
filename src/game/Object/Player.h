@@ -1876,7 +1876,13 @@ class Player : public Unit
         void SendAttackSwingCancelAttack();
         void SendAttackSwingDeadTarget();
         void SendAttackSwingNotStanding();
+        /**
+         * @brief 向玩家发送攻击超出范围
+        */
         void SendAttackSwingNotInRange();
+        /**
+         * @brief 向玩家发送必须面对目标
+        */
         void SendAttackSwingBadFacingAttack();
         void SendAutoRepeatCancel();
         void SendExplorationExperience(uint32 Area, uint32 Experience);
