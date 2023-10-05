@@ -495,7 +495,7 @@ Map::Visit(const Cell& cell, TypeContainerVisitor<T, CONTAINER>& visitor)
     const uint32 y = cell.GridY();
     const uint32 cell_x = cell.CellX();
     const uint32 cell_y = cell.CellY();
-    // 如果cell已经创建，并且对应的grid已经加载
+    // 如果cell已经创建，或者成功加载grid
     if (!cell.NoCreate() || loaded(GridPair(x, y)))
     {
         // 确保grid被加载

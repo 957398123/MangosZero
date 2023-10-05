@@ -692,7 +692,13 @@ class CreatureEventAI : public CreatureAI
         void DoFindFriendlyCC(std::list<Creature*>& _list, float range);
 
     protected:
+        /**
+         * @brief 事件更新时间
+        */
         uint32 m_EventUpdateTime;                           // Time between event updates
+        /**
+         * @brief 上次事件更新时间
+        */
         uint32 m_EventDiff;                                 // Time between the last event call
 
         // Variables used by Events themselves

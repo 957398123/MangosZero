@@ -927,16 +927,21 @@ enum SpellImmunity
 #define MAX_SPELL_IMMUNITY           6
 
 /**
- * The different types of attacks you can do with
- * weapons
- */
+ * @brief 武器类型
+*/
 enum WeaponAttackType
 {
-    ///Main-hand weapon
+    /**
+     * @brief 主手武器
+    */
     BASE_ATTACK   = 0,
-    ///Off-hand weapon
+    /**
+     * @brief 副手武器
+    */
     OFF_ATTACK    = 1,
-    ///Ranged weapon, bow/wand etc.
+    /**
+     * @brief 远程武器，弓/魔杖
+    */
     RANGED_ATTACK = 2
 };
 

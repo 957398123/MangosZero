@@ -380,12 +380,13 @@ void Unit::Update(uint32 update_diff, uint32 p_time)
 
 bool Unit::UpdateMeleeAttackingState()
 {
+    // 获取当前攻击对象
     Unit* victim = getVictim();
     if (!victim || IsNonMeleeSpellCasted(false))
     {
         return false;
     }
-
+    // 如果普通攻击处于CD中，直接返回。
     if (!isAttackReady(BASE_ATTACK) && !(isAttackReady(OFF_ATTACK) && haveOffhandWeapon()))
     {
         return false;

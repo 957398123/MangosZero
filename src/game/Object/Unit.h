@@ -1225,11 +1225,10 @@ class Unit : public WorldObject
          */
         uint32 getAttackTimer(WeaponAttackType type) const { return m_attackTimer[type]; }
         /**
-         * Checks whether the unit can do an attack. Does this by checking the attacktimer for the
-         * WeaponAttackType, can probably be thought of as a cooldown for each swing/shot
-         * @param type What weapon should we check for
-         * @return true if the Unit::m_attackTimer is zero for the given WeaponAttackType
-         */
+         * @brief 检查单位是否可以进行普通攻击
+         * @param type 攻击方式
+         * @return 
+        */
         bool isAttackReady(WeaponAttackType type = BASE_ATTACK) const { return m_attackTimer[type] == 0; }
         /**
          * Checks if the current Unit has an offhand weapon
@@ -3796,12 +3795,17 @@ protected:
         void _UpdateSpells(uint32 time);
         void _UpdateAutoRepeatSpell();
         bool m_AutoRepeatFirstCast;
-
+        /**
+         * @brief 攻击间隔
+        */
         uint32 m_attackTimer[MAX_ATTACK];
 
         float m_createStats[MAX_STATS];
 
         AttackerSet m_attackers;
+        /**
+         * @brief 正在交战的单位
+        */
         Unit* m_attacking;
 
         DeathState m_deathState; ///< The current state of life/death for this \ref Unit
