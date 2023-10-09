@@ -618,31 +618,36 @@ uint32 Unit::DealDamage(Unit* pVictim, uint32 damage, CleanDamage const* cleanDa
     // remove affects from attacker at any non-DoT damage (including 0 damage)
     if (damagetype != DOT)
     {
+        // 如果伤害类型不是隐形状态下受到的跌落伤害
         if (damagetype != SELF_DAMAGE_ROGUE_FALL)
         {
+            // 移除隐身光环
             RemoveSpellsCausingAura(SPELL_AURA_MOD_STEALTH);
         }
+        // 移除假死光环
         RemoveSpellsCausingAura(SPELL_AURA_FEIGN_DEATH);
-
+        // 如果被攻击者是玩家，并且不处于站立状态（比如睡觉、坐、跪、被击晕等）
         if (pVictim->GetTypeId() == TYPEID_PLAYER && !pVictim->IsStandState() && !pVictim->hasUnitState(UNIT_STAT_STUNNED))
         {
+            // 设置玩家处于站立状态
             pVictim->SetStandState(UNIT_STAND_STATE_STAND);
         }
     }
-
+    // 如果是0伤害
     if (!damage)
     {
         // Rage from physical damage received .
         if (cleanDamage && cleanDamage->damage && (damageSchoolMask & SPELL_SCHOOL_MASK_NORMAL) && pVictim->GetTypeId() == TYPEID_PLAYER && (pVictim->GetPowerType() == POWER_RAGE))
         {
+            // 如果被攻击者是战士，给其增加怒气值
             ((Player*)pVictim)->RewardRage(cleanDamage->damage, false);
         }
-
+        // 处理结束
         return 0;
     }
 
     DEBUG_FILTER_LOG(LOG_FILTER_DAMAGE, "DealDamageStart");
-
+    // 获取被攻击者当前血量
     uint32 health = pVictim->GetHealth();
     DEBUG_FILTER_LOG(LOG_FILTER_DAMAGE, "deal dmg:%d to health:%d ", damage, health);
 
@@ -650,10 +655,11 @@ uint32 Unit::DealDamage(Unit* pVictim, uint32 damage, CleanDamage const* cleanDa
     // Rage from Damage made (only from direct weapon damage)
     if (cleanDamage && damagetype == DIRECT_DAMAGE && this != pVictim && GetTypeId() == TYPEID_PLAYER && GetPowerType() == POWER_RAGE && cleanDamage->attackType != RANGED_ATTACK)
     {
+        // 如果攻击者是战士，给其增加怒气值
         ((Player*)this)->RewardRage(damage, true);
     }
 
-    // no xp,health if type 8 /critters/
+    // 如果攻击的是小动物
     if (pVictim->GetTypeId() == TYPEID_UNIT && pVictim->GetCreatureType() == CREATURE_TYPE_CRITTER)
     {
         // TODO: fix this part
@@ -671,23 +677,25 @@ uint32 Unit::DealDamage(Unit* pVictim, uint32 damage, CleanDamage const* cleanDa
         return damage;
     }
 
-    // duel ends when player has 1 or less hp
+    // 如果是在决斗中，伤害超过玩家剩余血量-1，决斗结束
     bool duel_hasEnded = false;
     if (pVictim->GetTypeId() == TYPEID_PLAYER && ((Player*)pVictim)->duel && damage >= (health - 1))
     {
         // prevent kill only if killed in duel and killed by opponent or opponent controlled creature
         if (((Player*)pVictim)->duel->opponent == this || ((Player*)pVictim)->duel->opponent->GetObjectGuid() == GetOwnerGuid())
         {
+            // 调整伤害
             damage = health - 1;
         }
-
         duel_hasEnded = true;
     }
 
-    // Get in CombatState
+    // 如果自己不是受害者，且伤害类型不是DOT，立即使受害者进入战斗状态
     if (pVictim != this && damagetype != DOT)
     {
+        // 设置受害者进如战斗状态
         SetInCombatWith(pVictim);
+        // 将自身加入受害者的仇恨列表
         pVictim->SetInCombatWith(this);
 
         if (Player* attackedPlayer = pVictim->GetCharmerOrOwnerPlayerOrPlayerItself())

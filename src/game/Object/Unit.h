@@ -845,7 +845,9 @@ struct CalcDamageInfo
      * \todo Used for what?
      */
     uint32 procEx;
-    /// Used only for rage calculation
+    /**
+     * @brief 仅用于计算愤怒值
+    */
     uint32 cleanDamage;
     /// (Old comment) \todo remove this field (need use TargetState)
     MeleeHitOutcome hitOutCome;
@@ -3380,9 +3382,9 @@ class Unit : public WorldObject
          */
         void RemoveAurasAtMechanicImmunity(uint32 mechMask, uint32 exceptSpellId, bool non_positive = false);
         /**
-         * Removes all \ref Spell s that cause the given \ref AuraType
-         * @param auraType the type of auras we would like to remove spells for
-         */
+         * @brief 移除技能产生的光环
+         * @param auraType 光环类型
+        */
         void RemoveSpellsCausingAura(AuraType auraType);
         /**
          * Same as \ref Unit::RemoveSpellsCausingAura but with an exception

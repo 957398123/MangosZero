@@ -1081,7 +1081,7 @@ enum DamageEffectType
     DOT                     = 2,                            // 持续伤害
     HEAL                    = 3,                            // 持续回复
     NODAMAGE                = 4,                            //< used also in case when damage applied to health but not applied to spell channelInterruptFlags/etc
-    SELF_DAMAGE_ROGUE_FALL  = 5,                            //< used to avoid rogue loosing stealth on falling damage
+    SELF_DAMAGE_ROGUE_FALL  = 5,                            // 用于防止盗贼隐身后受到掉落伤害破除隐身
     SELF_DAMAGE             = 6
 };
 
@@ -1718,7 +1718,7 @@ enum CreatureType
     CREATURE_TYPE_GIANT            = 5,
     CREATURE_TYPE_UNDEAD           = 6,
     CREATURE_TYPE_HUMANOID         = 7,
-    CREATURE_TYPE_CRITTER          = 8,
+    CREATURE_TYPE_CRITTER          = 8,                     // 小动物
     CREATURE_TYPE_MECHANICAL       = 9,
     CREATURE_TYPE_NOT_SPECIFIED    = 10,
     CREATURE_TYPE_TOTEM            = 11,
