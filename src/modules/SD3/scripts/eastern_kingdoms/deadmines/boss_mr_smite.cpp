@@ -45,11 +45,11 @@ enum
     EQUIP_ID_AXE                    = 2183,
     EQUIP_ID_HAMMER                 = 10756,
 
-    SPELL_NIBLE_REFLEXES            = 6433,                 // removed after phase 1
-    SPELL_SMITE_SLAM                = 6435,                 // only casted in phase 3
-    SPELL_SMITE_STOMP               = 6432,
-    SPELL_SMITE_HAMMER              = 6436,                 // unclear, not casted in sniff
-    SPELL_THRASH                    = 12787,                // only casted in phase 2; unclear, 3391 directly casted in sniff
+    SPELL_NIBLE_REFLEXES            = 6433,                 // 迅捷反射
+    SPELL_SMITE_SLAM                = 6435,                 // 重拳猛击
+    SPELL_SMITE_STOMP               = 6432,                 // 重拳先生践踏
+    SPELL_SMITE_HAMMER              = 6436,                 // 重拳先生之锤
+    SPELL_THRASH                    = 12787,                // 痛击
 
     PHASE_1                         = 1,
     PHASE_2                         = 2,

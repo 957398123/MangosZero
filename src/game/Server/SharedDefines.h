@@ -1082,7 +1082,7 @@ enum DamageEffectType
     HEAL                    = 3,                            // 持续回复
     NODAMAGE                = 4,                            //< used also in case when damage applied to health but not applied to spell channelInterruptFlags/etc
     SELF_DAMAGE_ROGUE_FALL  = 5,                            // 用于防止盗贼隐身后受到掉落伤害破除隐身
-    SELF_DAMAGE             = 6
+    SELF_DAMAGE             = 6                             // 自身造成的伤害
 };
 
 enum GameobjectTypes

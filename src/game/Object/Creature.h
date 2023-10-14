@@ -537,6 +537,10 @@ class Creature : public Unit
         uint32 GetEquipmentId() const { return m_equipmentId; }
 
         CreatureSubtype GetSubtype() const { return m_subtype; }
+        /**
+         * @brief 是否是宠物
+         * @return 
+        */
         bool IsPet() const { return m_subtype == CREATURE_SUBTYPE_PET; }
         bool IsTotem() const { return m_subtype == CREATURE_SUBTYPE_TOTEM; }
         bool IsTemporarySummon() const { return m_subtype == CREATURE_SUBTYPE_TEMPORARY_SUMMON; }
@@ -710,9 +714,8 @@ class Creature : public Unit
         void ResetPlayerDamageReq() { m_PlayerDamageReq = GetHealth() / 2; }
 
         /**
-        * function indicating whether the whether the creature has a looter recipient defined (either a group ID, either a player GUID).
-        *
-        * \return boolean true if the creature has a recipient defined, false otherwise.
+         * @brief 是否已有拾取
+         * @return
         */
         bool HasLootRecipient() const { return m_lootGroupRecipientId || m_lootRecipientGuid; }
 
@@ -722,6 +725,10 @@ class Creature : public Unit
         * \return boolean true if the creature's recipient is a group, false otherwise.
         */
         bool IsGroupLootRecipient() const { return m_lootGroupRecipientId; }
+        /**
+         * @brief 设置拾取权，如果玩家在队伍中，队伍中其他玩家都有拾取权。
+         * @param unit 玩家
+        */
         void SetLootRecipient(Unit* unit);
         void AllLootRemovedFromCorpse();
         Player* GetOriginalLootRecipient() const;           // ignore group changes/etc, not for looting

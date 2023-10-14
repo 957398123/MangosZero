@@ -1354,12 +1354,11 @@ class Unit : public WorldObject
             return NULL;
         }
         /**
-         * Tries to attack a Unit/Player, also makes sure to stop attacking the current target
-         * if we're already attacking someone.
-         * @param victim The Unit to attack
-         * @param meleeAttack Whether we should attack with melee or ranged/magic
-         * @return True if an attack was initiated, false otherwise
-         */
+         * @brief 尝试攻击指定单位，同时确保停止攻击当前目标
+         * @param victim 攻击对象
+         * @param meleeAttack 是否近战攻击
+         * @return 发起攻击为true，其它false
+        */
         bool Attack(Unit* victim, bool meleeAttack);
         /**
          * Called when we are attack by someone in someway, might be when a fear runs out and
@@ -1400,8 +1399,9 @@ class Unit : public WorldObject
          */
         bool isAttackingPlayer() const;
         /**
-         * @return The victim that you are currently attacking
-         */
+         * @brief 获取当前攻击对象
+         * @return 
+        */
         Unit* getVictim() const { return m_attacking; }
         /**
          * Stops a unit from combat, removes all attackers and stops attacking.
@@ -1659,12 +1659,10 @@ class Unit : public WorldObject
          */
         void SetHealthPercent(float percent);
         /**
-         * Modifies the health by the difference given. If the character had 100 health and we sent in
-         * -150 as the amount to decrease it would return -100 as that is how much it decreased since
-         * we cant be under 0 health.
-         * @param val the difference to apply to the health, ie: -100 would decrease the life by 100
-         * @return how much the Unit gained/lost in health.
-         */
+         * @brief 通过给定的值修改血量
+         * @param val 要修改血量值，+100表示增加100，-100表示扣除100血量
+         * @return 修改后剩余血量，始终大于等于0
+        */
         int32 ModifyHealth(int32 val);
 
         /**
@@ -3150,6 +3148,10 @@ class Unit : public WorldObject
             return this;
         }
         bool IsCharmerOrOwnerPlayerOrPlayerItself() const;
+        /**
+         * @brief 获取控制当前单位的引用
+         * @return 
+        */
         Player* GetCharmerOrOwnerPlayerOrPlayerItself();
         Player const* GetCharmerOrOwnerPlayerOrPlayerItself() const;
 

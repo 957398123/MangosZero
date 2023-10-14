@@ -1253,27 +1253,25 @@ Player* Creature::GetLootRecipient() const
  */
 void Creature::SetLootRecipient(Unit* unit)
 {
-    // set the player whose group should receive the right
-    // to loot the creature after it dies
-    // should be set to NULL after the loot disappears
-
+    // 为空时，清除拾取
     if (!unit)
     {
         m_lootRecipientGuid.Clear();
         m_lootGroupRecipientId = 0;
         return;
     }
-
+    // 获取控制当前单位的引用（有可能是玩家自身，或者是心控玩家的玩家）
     Player* player = unit->GetCharmerOrOwnerPlayerOrPlayerItself();
+    // 如果不是玩家，不设置拾取权
     if (!player)                                            // normal creature, no player involved
     {
         return;
     }
 
-    // set player for non group case or if group will disbanded
+    // 设置当前玩家具有拾取权
     m_lootRecipientGuid = player->GetObjectGuid();
 
-    // set group for group existing case including if player will leave group at loot time
+    // 设置玩家所在队伍具有拾取权
     if (Group* group = player->GetGroup())
     {
         m_lootGroupRecipientId = group->GetId();

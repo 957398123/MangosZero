@@ -703,11 +703,13 @@ uint32 Unit::DealDamage(Unit* pVictim, uint32 damage, CleanDamage const* cleanDa
             SetContestedPvP(attackedPlayer);
         }
     }
-
+    // 如果受害者是生物类型
     if (Creature* victim = pVictim->ToCreature())
     {
+        // 如果受害者不是宠物并且可以获取拾取权
         if (!victim->IsPet() && !victim->HasLootRecipient())
         {
+            // 设置拾取权
             victim->SetLootRecipient(this);
         }
 
@@ -716,23 +718,21 @@ uint32 Unit::DealDamage(Unit* pVictim, uint32 damage, CleanDamage const* cleanDa
             victim->LowerPlayerDamageReq(health < damage ? health : damage);
         }
     }
-
+    // 如果伤害少于血量
     if (health <= damage)
     {
         DEBUG_FILTER_LOG(LOG_FILTER_DAMAGE, "DealDamage %s Killed %s", GetGuidStr().c_str(), pVictim->GetGuidStr().c_str());
 
-        /*
-         *                      Preparation: Who gets credit for killing whom, invoke SpiritOfRedemtion?
-         */
-        // for loot will be used only if group_tap == NULL
+        // 计算拾取权
         Player* player_tap = GetCharmerOrOwnerPlayerOrPlayerItself();
         Group* group_tap = NULL;
 
         // in creature kill case group/player tap stored for creature
         if (pVictim->GetTypeId() == TYPEID_UNIT)
         {
+            // 获取拥有受害者拾取权的小队
             group_tap = ((Creature*)pVictim)->GetGroupLootRecipient();
-
+            // 获取拥有受害者原始拾取权的玩家（造成首次伤害的玩家）
             if (Player* recipient = ((Creature*)pVictim)->GetOriginalLootRecipient())
             {
                 player_tap = recipient;
@@ -937,25 +937,25 @@ uint32 Unit::DealDamage(Unit* pVictim, uint32 damage, CleanDamage const* cleanDa
             JustKilledCreature((Creature*)pVictim, player_tap);
         }
     }
-    else                                                    // if (health <= damage)
+    else                                                    // 如果伤害大于剩余血量
     {
         DEBUG_FILTER_LOG(LOG_FILTER_DAMAGE, "DealDamageAlive");
-
+        // 减少被攻击者血量
         pVictim->ModifyHealth(- (int32)damage);
-
+        // 如果伤害类型不是DOT
         if (damagetype != DOT)
         {
             if (!getVictim())
             {
                 // if not have main target then attack state with target (including AI call)
-                // start melee attacks only after melee hit
+                // 只有近战命中后才开始攻击
                 Attack(pVictim, (damagetype == DIRECT_DAMAGE));
             }
 
             // if damage pVictim call AI reaction
             pVictim->AttackedBy(this);
         }
-
+        
         if (damagetype == DIRECT_DAMAGE || damagetype == SPELL_DIRECT_DAMAGE)
         {
             if (!spellProto || !(spellProto->AuraInterruptFlags & AURA_INTERRUPT_FLAG_DIRECT_DAMAGE))
