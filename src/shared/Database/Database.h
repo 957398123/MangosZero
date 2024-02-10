@@ -230,12 +230,11 @@ class Database
         virtual ~Database();
 
         /**
-         * @brief
-         *
-         * @param infoString
-         * @param nConns
-         * @return bool
-         */
+         * @brief 初始化数据库
+         * @param infoString 数据库信息
+         * @param nConns 连接数量
+         * @return 
+        */
         virtual bool Initialize(const char* infoString, int nConns = 1);
         /**
          * @brief start worker thread for async DB request execution

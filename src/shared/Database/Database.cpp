@@ -140,11 +140,12 @@ bool Database::Initialize(const char* infoString, int nConns /*= 1*/)
         }
     }
 
+    // 获取Ping配置
     m_pingIntervallms = sConfig.GetIntDefault("MaxPingTime", 30) * (MINUTE * 1000);
 
     // create DB connections
 
-    // setup connection pool size
+    // 设置连接池大小
     if (nConns < MIN_CONNECTION_POOL_SIZE)
     {
         m_nQueryConnPoolSize = MIN_CONNECTION_POOL_SIZE;
@@ -158,7 +159,7 @@ bool Database::Initialize(const char* infoString, int nConns /*= 1*/)
         m_nQueryConnPoolSize = nConns;
     }
 
-    // create connection pool for sync requests
+    // 创建数据库连接池
     for (int i = 0; i < m_nQueryConnPoolSize; ++i)
     {
         SqlConnection* pConn = CreateConnection();
@@ -171,15 +172,15 @@ bool Database::Initialize(const char* infoString, int nConns /*= 1*/)
         m_pQueryConnections.push_back(pConn);
     }
 
-    // create and initialize connection for async requests
+    // 创建处理异步任务的数据库连接
     m_pAsyncConn = CreateConnection();
     if (!m_pAsyncConn->Initialize(infoString))
     {
         return false;
     }
-
+    // 创建线程安全的队列
     m_pResultQueue = new SqlResultQueue;
-
+    // 初始化延迟线程
     InitDelayThread();
     return true;
 }

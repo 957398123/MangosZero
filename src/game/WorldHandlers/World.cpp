@@ -407,7 +407,7 @@ void World::LoadConfigSettings(bool reload)
         }
     }
 
-    ///- Read the version of the configuration file and warn the user in case of emptiness or mismatch
+    // 读取配置文件的版本，如果空或者不匹配警告用户
     uint32 confVersion = sConfig.GetIntDefault("ConfVersion", 0);
     if (!confVersion)
     {
@@ -963,16 +963,16 @@ void World::LoadConfigSettings(bool reload)
 /// Initialize the World
 void World::SetInitialWorldSettings()
 {
-    ///- Initialize the random number generator
+    // 设置随机数种子
     srand((unsigned int)time(NULL));
 
-    ///- Time server startup
+    // 服务器启动时间
     uint32 startupBegin = GameTime::GetGameTimeMS();
 
     ///- Initialize detour memory management
     dtAllocSetCustom(dtCustomAlloc, dtCustomFree);
 
-    ///- Initialize config settings
+    // 加载配置文件的世界设定参数
     LoadConfigSettings();
 
     ///- Initialize VMapManager function pointers (to untangle game/collision circular deps)
