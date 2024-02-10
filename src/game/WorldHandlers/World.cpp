@@ -983,7 +983,7 @@ void World::SetInitialWorldSettings()
     }
 
     ///- Check the existence of the map files for all races start areas.
-    if (!MapManager::ExistMapAndVMap(0, -6240.32f, 331.033f) ||                     // Dwarf/ Gnome
+    if (!MapManager::ExistMapAndVMap(0, -6240.32f, 331.033f) ||                 // Dwarf/ Gnome
         !MapManager::ExistMapAndVMap(0, -8949.95f, -132.493f) ||                // Human
         !MapManager::ExistMapAndVMap(1, -618.518f, -4251.67f) ||                // Orc
         !MapManager::ExistMapAndVMap(0, 1676.35f, 1677.45f) ||                  // Scourge

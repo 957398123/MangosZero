@@ -218,7 +218,7 @@ void MapManager::Update(uint32 diff)
     {
         m_updater.wait();
     }
-    // ¸üÐÂ´¬ºÍ·ÉÍ§
+    // ï¿½ï¿½ï¿½Â´ï¿½ï¿½Í·ï¿½Í§
     for (TransportSet::iterator iter = m_Transports.begin(); iter != m_Transports.end(); ++iter)
     {
         WorldObject::UpdateHelper helper((*iter));

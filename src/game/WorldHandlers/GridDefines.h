@@ -176,10 +176,10 @@ namespace MaNGOS
     }
 
     /**
-     * @brief 将世界坐标转换为cell坐标
-     * @param x 坐标x
-     * @param y 坐标y
-     * @return cell坐标
+     * @brief 灏嗕笘鐣屽潗鏍囪浆鎹负cell鍧愭爣
+     * @param x 鍧愭爣x
+     * @param y 鍧愭爣y
+     * @return cell鍧愭爣
     */
     inline CellPair ComputeCellPair(float x, float y)
     {
