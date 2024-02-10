@@ -982,7 +982,7 @@ void World::SetInitialWorldSettings()
         vmmgr2->IsVMAPDisabledForPtr = &DisableMgr::IsVMAPDisabledFor;
     }
 
-    ///- Check the existence of the map files for all races start areas.
+    // 检查所有角色出生地点地图文件数据是否存在
     if (!MapManager::ExistMapAndVMap(0, -6240.32f, 331.033f) ||                 // Dwarf/ Gnome
         !MapManager::ExistMapAndVMap(0, -8949.95f, -132.493f) ||                // Human
         !MapManager::ExistMapAndVMap(1, -618.518f, -4251.67f) ||                // Orc
@@ -1011,10 +1011,10 @@ void World::SetInitialWorldSettings()
     uint32 realm_zone = getConfig(CONFIG_UINT32_REALM_ZONE);
     LoginDatabase.PExecute("UPDATE `realmlist` SET `icon` = %u, `timezone` = %u WHERE `id` = '%u'", server_type, realm_zone, realmID);
 
-    ///- Remove the bones (they should not exist in DB though) and old corpses after a restart
+    // 重启以后移除骨头和尸体
     CharacterDatabase.PExecute("DELETE FROM `corpse` WHERE `corpse_type` = '0' OR `time` < (UNIX_TIMESTAMP()-'%u')", 3 * DAY);
 
-    ///- Load the DBC files
+    // 加载DBC文件
     sLog.outString("Initialize DBC data stores...");
     LoadDBCStores(m_dataPath);
     DetectDBCLang();
