@@ -48,16 +48,16 @@ enum CreatureFlagsExtra
 {
     CREATURE_FLAG_EXTRA_INSTANCE_BIND          = 0x00000001,       // creature kill bind instance with killer and killer's group
     CREATURE_FLAG_EXTRA_NO_AGGRO               = 0x00000002,       // not aggro (ignore faction/reputation hostility)
-    CREATURE_FLAG_EXTRA_NO_PARRY               = 0x00000004,       // ÉúÎïÎŞ·¨ÕĞ¼Ü
-    CREATURE_FLAG_EXTRA_NO_PARRY_HASTEN        = 0x00000008,       // ÉúÎïÎŞ·¨ÔÚÕĞ¼ÜÊ±·´»÷
-    CREATURE_FLAG_EXTRA_NO_BLOCK               = 0x00000010,       // ÉúÎïÎŞ·¨¸ñµ²
+    CREATURE_FLAG_EXTRA_NO_PARRY               = 0x00000004,       // ç”Ÿç‰©æ— æ³•æ‹›æ¶
+    CREATURE_FLAG_EXTRA_NO_PARRY_HASTEN        = 0x00000008,       // ç”Ÿç‰©æ— æ³•åœ¨æ‹›æ¶æ—¶åå‡»
+    CREATURE_FLAG_EXTRA_NO_BLOCK               = 0x00000010,       // ç”Ÿç‰©æ— æ³•æ ¼æŒ¡
     CREATURE_FLAG_EXTRA_NO_CRUSH               = 0x00000020,       // creature can't do crush attacks
-    CREATURE_FLAG_EXTRA_NO_XP_AT_KILL          = 0x00000040,       // ÉúÎï±»»÷É±²»Ìá¹©¾­ÑéÖµ
-    CREATURE_FLAG_EXTRA_INVISIBLE              = 0x00000080,       // ÉúÎï¶ÔÍæ¼ÒÀ´Ëµ×ÜÊÇ²»¿É¼û£¨Ö÷ÒªÊÇ´¥·¢ÉúÎï£©
-    CREATURE_FLAG_EXTRA_NOT_TAUNTABLE          = 0x00000100,       // ÉúÎï¶Ô³°·íÃâÒß
-    CREATURE_FLAG_EXTRA_AGGRO_ZONE             = 0x00000200,       // ÉúÎï¹²Ïí³ğºŞ£¨¼´µ±¹¥»÷ÁËÒ»ÈºÉúÎïÆäÖĞÒ»¸ö£¬ÆäÓàÒ²»á¼ÓÈëÕ½¶·£©
-    CREATURE_FLAG_EXTRA_GUARD                  = 0x00000400,       // ÉúÎïÊÇÊØÎÀ
-    CREATURE_FLAG_EXTRA_NO_CALL_ASSIST         = 0x00000800,       // ÉúÎï²»¹²Ïí³ğºŞ
+    CREATURE_FLAG_EXTRA_NO_XP_AT_KILL          = 0x00000040,       // ç”Ÿç‰©è¢«å‡»æ€ä¸æä¾›ç»éªŒå€¼
+    CREATURE_FLAG_EXTRA_INVISIBLE              = 0x00000080,       // ç”Ÿç‰©å¯¹ç©å®¶æ¥è¯´æ€»æ˜¯ä¸å¯è§ï¼ˆä¸»è¦æ˜¯è§¦å‘ç”Ÿç‰©ï¼‰
+    CREATURE_FLAG_EXTRA_NOT_TAUNTABLE          = 0x00000100,       // ç”Ÿç‰©å¯¹å˜²è®½å…ç–«
+    CREATURE_FLAG_EXTRA_AGGRO_ZONE             = 0x00000200,       // ç”Ÿç‰©å…±äº«ä»‡æ¨ï¼ˆå³å½“æ”»å‡»äº†ä¸€ç¾¤ç”Ÿç‰©å…¶ä¸­ä¸€ä¸ªï¼Œå…¶ä½™ä¹Ÿä¼šåŠ å…¥æˆ˜æ–—ï¼‰
+    CREATURE_FLAG_EXTRA_GUARD                  = 0x00000400,       // ç”Ÿç‰©æ˜¯å®ˆå«
+    CREATURE_FLAG_EXTRA_NO_CALL_ASSIST         = 0x00000800,       // ç”Ÿç‰©ä¸å…±äº«ä»‡æ¨
     CREATURE_FLAG_EXTRA_ACTIVE                 = 0x00001000,       // creature is active object. Grid of this creature will be loaded and creature set as active
     CREATURE_FLAG_EXTRA_MMAP_FORCE_ENABLE      = 0x00002000,       // creature is forced to use MMaps
     CREATURE_FLAG_EXTRA_MMAP_FORCE_DISABLE     = 0x00004000,       // creature is forced to NOT use MMaps
@@ -538,7 +538,7 @@ class Creature : public Unit
 
         CreatureSubtype GetSubtype() const { return m_subtype; }
         /**
-         * @brief ÊÇ·ñÊÇ³èÎï
+         * @brief æ˜¯å¦æ˜¯å® ç‰©
          * @return 
         */
         bool IsPet() const { return m_subtype == CREATURE_SUBTYPE_PET; }
@@ -714,7 +714,7 @@ class Creature : public Unit
         void ResetPlayerDamageReq() { m_PlayerDamageReq = GetHealth() / 2; }
 
         /**
-         * @brief ÊÇ·ñÒÑÓĞÊ°È¡
+         * @brief æ˜¯å¦å·²æœ‰æ‹¾å–
          * @return
         */
         bool HasLootRecipient() const { return m_lootGroupRecipientId || m_lootRecipientGuid; }
@@ -726,8 +726,8 @@ class Creature : public Unit
         */
         bool IsGroupLootRecipient() const { return m_lootGroupRecipientId; }
         /**
-         * @brief ÉèÖÃÊ°È¡È¨£¬Èç¹ûÍæ¼ÒÔÚ¶ÓÎéÖĞ£¬¶ÓÎéÖĞÆäËûÍæ¼Ò¶¼ÓĞÊ°È¡È¨¡£
-         * @param unit Íæ¼Ò
+         * @brief è®¾ç½®æ‹¾å–æƒï¼Œå¦‚æœç©å®¶åœ¨é˜Ÿä¼ä¸­ï¼Œé˜Ÿä¼ä¸­å…¶ä»–ç©å®¶éƒ½æœ‰æ‹¾å–æƒã€‚
+         * @param unit ç©å®¶
         */
         void SetLootRecipient(Unit* unit);
         void AllLootRemovedFromCorpse();
