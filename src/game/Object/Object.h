@@ -702,7 +702,7 @@ class WorldObject : public Object
 
         virtual void StopGroupLoot() {}
         /**
-         * @brief 游戏对象名称
+         * @brief 娓告垙瀵硅薄鍚嶇О
         */
         std::string m_name;
 
