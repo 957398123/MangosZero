@@ -103,10 +103,10 @@ void Eluna::Uninitialize()
 void Eluna::LoadScriptPaths()
 {
     uint32 oldMSTime = ElunaUtil::GetCurrTime();
-
+    // 清除容器
     lua_scripts.clear();
     lua_extensions.clear();
-
+    // 获取lua脚本路径
     lua_folderpath = eConfigMgr->GetStringDefault("Eluna.ScriptPath", "lua_scripts");
 #ifndef ELUNA_WINDOWS
     if (lua_folderpath[0] == '~')
@@ -115,6 +115,7 @@ void Eluna::LoadScriptPaths()
 #endif
     ELUNA_LOG_INFO("[Eluna]: Searching scripts from `%s`", lua_folderpath.c_str());
     lua_requirepath.clear();
+    // 获取该文件夹及其子目录的脚本路径
     GetScripts(lua_folderpath);
     // Erase last ;
     if (!lua_requirepath.empty())
@@ -450,7 +451,7 @@ void Eluna::RunScripts()
 
     uint32 oldMSTime = ElunaUtil::GetCurrTime();
     uint32 count = 0;
-
+    // 对脚本进行排序
     ScriptList scripts;
     lua_extensions.sort(ScriptPathComparator);
     lua_scripts.sort(ScriptPathComparator);
@@ -494,7 +495,7 @@ void Eluna::RunScripts()
             continue;
         }
         // Stack: package, modules, filefunc
-
+        // luaL_loadfile成功后，会入栈函数对象，这里是执行函数(跟JS一样，一个文件相当于一个大的function)
         if (ExecuteCall(0, 1))
         {
             // Stack: package, modules, result

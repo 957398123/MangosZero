@@ -1020,6 +1020,7 @@ void World::SetInitialWorldSettings()
     DetectDBCLang();
     sObjectMgr.SetDBCLocaleIndex(GetDefaultDbcLocale());    // Get once for all the locale index of DBC language (console/broadcasts)
 
+    // 获取WorldDatabase中表script_binding所有ScriptName
     sLog.outString("Loading Script Names...");
     sScriptMgr.LoadScriptNames();
 
@@ -1047,7 +1048,7 @@ void World::SetInitialWorldSettings()
     sLog.outString();
 
 #ifdef ENABLE_ELUNA
-    ///- Initialize Lua Engine
+    // 初始化Lua引擎，添加C++对象和函数到容器。
     sLog.outString("Initialize Eluna Lua Engine...");
     Eluna::Initialize();
 #endif /* ENABLE_ELUNA */

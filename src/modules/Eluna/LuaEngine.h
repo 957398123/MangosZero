@@ -202,6 +202,9 @@ private:
     // Use ReloadEluna() to make eluna reload
     // This is called on world update to reload eluna
     static void _ReloadEluna();
+    /**
+     * @brief 加载脚本路径
+    */
     static void LoadScriptPaths();
     static void GetScripts(std::string path);
     static void AddScriptPath(std::string filename, const std::string& fullpath);
@@ -252,6 +255,9 @@ private:
     void Push(T const* ptr)                     { Push(L, ptr); ++push_counter; }
 
 public:
+    /**
+     * @brief 全局Elua引擎实例
+    */
     static Eluna* GEluna;
 
     lua_State* L;
@@ -276,7 +282,9 @@ public:
     BindingMap< EntryKey<Hooks::InstanceEvents> >*   InstanceEventBindings;
 
     BindingMap< UniqueObjectKey<Hooks::CreatureEvents> >*  CreatureUniqueBindings;
-
+    /**
+     * @brief 初始化Elua
+    */
     static void Initialize();
     static void Uninitialize();
     // This function is used to make eluna reload
