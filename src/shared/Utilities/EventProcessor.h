@@ -30,7 +30,7 @@
 #include <map>
 
 /**
- * @brief ËùÓĞÊ±¼äµ¥Î»ÎªºÁÃë
+ * @brief æ‰€æœ‰æ—¶é—´å•ä½ä¸ºæ¯«ç§’
  *
  */
 class BasicEvent
@@ -56,39 +56,39 @@ class BasicEvent
 
 
         /**
-         * @brief Õâ¸öº¯ÊıÔÚEvent±»´¥·¢µÄÊ±ºòÖ´ĞĞ
+         * @brief è¿™ä¸ªå‡½æ•°åœ¨Eventè¢«è§¦å‘çš„æ—¶å€™æ‰§è¡Œ
          *
-         * @param uint64 e_time ¿ªÊ¼Ö´ĞĞÊ±¼ä
-         * @param uint32 p_time ¸üĞÂ¼ä¸ô
-         * @return bool Èç¹û²»ÏëÒªÉ¾³ıEvent£¬·µ»Øfalse
+         * @param uint64 e_time å¼€å§‹æ‰§è¡Œæ—¶é—´
+         * @param uint32 p_time æ›´æ–°é—´éš”
+         * @return bool å¦‚æœä¸æƒ³è¦åˆ é™¤Eventï¼Œè¿”å›false
          */
         virtual bool Execute(uint64 /*e_time*/, uint32 /*p_time*/) { return true; }
 
         /**
-         * @brief EventÄÜ·ñ±»°²È«µÄÉ¾³ı
+         * @brief Eventèƒ½å¦è¢«å®‰å…¨çš„åˆ é™¤
          *
          * @return bool
          */
         virtual bool IsDeletable() const { return true; }
 
         /**
-         * @brief Õâ¸öº¯ÊıÔÚEventÖÕÖ¹Ê±Ö´ĞĞ
+         * @brief è¿™ä¸ªå‡½æ•°åœ¨Eventç»ˆæ­¢æ—¶æ‰§è¡Œ
          *
          * @param uint64
          */
         virtual void Abort(uint64 /*e_time*/) {}
 
         /**
-         * @brief ÊÇ·ñÖÕÖ¹Event£¬ÖÕÖ¹Ê±µ÷ÓÃAbortº¯Êı
+         * @brief æ˜¯å¦ç»ˆæ­¢Eventï¼Œç»ˆæ­¢æ—¶è°ƒç”¨Abortå‡½æ•°
         */
         bool to_Abort;
 
         /**
-         * @brief Event¼ÓÈë´¦Àí¶ÓÁĞµÄÊ±¼ä
+         * @brief EventåŠ å…¥å¤„ç†é˜Ÿåˆ—çš„æ—¶é—´
         */
         uint64 m_addTime;
         /**
-         * @brief Event´¥·¢Ê±¼ä
+         * @brief Eventè§¦å‘æ—¶é—´
         */
         uint64 m_execTime;
 };
@@ -119,41 +119,41 @@ class EventProcessor
         ~EventProcessor();
 
         /**
-         * @brief ¸üĞÂEventProcessorµÄÊ±¼ä
-         * @param p_time Ôö¼ÓµÄÊ±¼ä 
+         * @brief æ›´æ–°EventProcessorçš„æ—¶é—´
+         * @param p_time å¢åŠ çš„æ—¶é—´ 
         */
         void Update(uint32 p_time); 
         /**
-         * @brief ¹Ø±ÕËùÓĞÊÂ¼ş
-         * @param ÊÇ·ñÇ¿ÖÆ¹Ø±Õ
+         * @brief å…³é—­æ‰€æœ‰äº‹ä»¶
+         * @param æ˜¯å¦å¼ºåˆ¶å…³é—­
         */
         void KillAllEvents(bool force);
         /**
-         * @brief Ìí¼ÓEventµ½´¦Àí¶ÓÁĞ
-         * @param Event Òª´¦ÀíµÄEvent
-         * @param e_time Event´¥·¢Ê±¼ä
-         * @param set_addtime ÊÇ·ñÉèÖÃEvent¼ÓÈëÊ±¼ä
+         * @brief æ·»åŠ Eventåˆ°å¤„ç†é˜Ÿåˆ—
+         * @param Event è¦å¤„ç†çš„Event
+         * @param e_time Eventè§¦å‘æ—¶é—´
+         * @param set_addtime æ˜¯å¦è®¾ç½®EventåŠ å…¥æ—¶é—´
         */
         void AddEvent(BasicEvent* Event, uint64 e_time, bool set_addtime = true);
         /**
-         * @brief ¼ÆËãÊ±¼ä
-         * @param t_offset ÒªÔö¼ÓµÄÊ±¼ä
-         * @return µ±Ç°Ê±¼ä+Ôö¼ÓµÄÊ±¼ä
+         * @brief è®¡ç®—æ—¶é—´
+         * @param t_offset è¦å¢åŠ çš„æ—¶é—´
+         * @return å½“å‰æ—¶é—´+å¢åŠ çš„æ—¶é—´
         */
         uint64 CalculateTime(uint64 t_offset);
 
     protected:
 
         /**
-         * @brief µ±Ç°Ê±¼ä
+         * @brief å½“å‰æ—¶é—´
         */
         uint64 m_time;
         /**
-         * @brief Event´¦Àí¶ÓÁĞ
+         * @brief Eventå¤„ç†é˜Ÿåˆ—
         */
         EventList m_events;
         /**
-         * @brief ÊÇ·ñ×èÖ¹Event²åÈë
+         * @brief æ˜¯å¦é˜»æ­¢Eventæ’å…¥
         */
         bool m_aborting;
 };

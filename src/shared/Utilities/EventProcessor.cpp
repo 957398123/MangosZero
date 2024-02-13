@@ -32,35 +32,35 @@ EventProcessor::EventProcessor()
 
 EventProcessor::~EventProcessor()
 {
-    // ÍË³öÊ±Ç¿ÖÆÇåÀíËùÓÐEvent
+    // é€€å‡ºæ—¶å¼ºåˆ¶æ¸…ç†æ‰€æœ‰Event
     KillAllEvents(true);
 }
 
 void EventProcessor::Update(uint32 p_time)
 {
-    // ¸üÐÂÊ±¼ä
+    // æ›´æ–°æ—¶é—´
     m_time += p_time;
 
-    // Ñ­»·¶ÓÁÐ£¬È¡³öÆäÖÐµ½ÆÚµÄEvent
+    // å¾ªçŽ¯é˜Ÿåˆ—ï¼Œå–å‡ºå…¶ä¸­åˆ°æœŸçš„Event
     EventList::iterator i;
     while (((i = m_events.begin()) != m_events.end()) && i->first <= m_time)
     {
-        // »ñÈ¡Event²¢´Ó¶ÓÁÐÖÐÉ¾³ý
+        // èŽ·å–Eventå¹¶ä»Žé˜Ÿåˆ—ä¸­åˆ é™¤
         BasicEvent* Event = i->second;
         m_events.erase(i);
-        // Èç¹ûEvent²»ÐèÒªÖÕÖ¹
+        // å¦‚æžœEventä¸éœ€è¦ç»ˆæ­¢
         if (!Event->to_Abort)
         {
-            // »Øµ÷Executeº¯Êýºó£¬É¾³ýEvent
+            // å›žè°ƒExecuteå‡½æ•°åŽï¼Œåˆ é™¤Event
             if (Event->Execute(m_time, p_time))
             {
-                // Èç¹û»Øµ÷EventµÄExecuteº¯Êý·µ»Øtrue£¬É¾³ý¸ÃEvent
+                // å¦‚æžœå›žè°ƒEventçš„Executeå‡½æ•°è¿”å›žtrueï¼Œåˆ é™¤è¯¥Event
                 delete Event;
             }
         }
         else
         {
-            // »Øµ÷Abortº¯ÊýºóÉ¾³ýEvent
+            // å›žè°ƒAbortå‡½æ•°åŽåˆ é™¤Event
             Event->Abort(m_time);
             delete Event;
         }
@@ -69,18 +69,18 @@ void EventProcessor::Update(uint32 p_time)
 
 void EventProcessor::KillAllEvents(bool force)
 {
-    // ×èÖ¹²åÈëEvent
+    // é˜»æ­¢æ’å…¥Event
     m_aborting = true;
 
-    // ÖÕÖ¹¶ÓÁÐÖÐµÄEvent
+    // ç»ˆæ­¢é˜Ÿåˆ—ä¸­çš„Event
     for (EventList::iterator i = m_events.begin(); i != m_events.end();)
     {
         EventList::iterator i_old = i;
         ++i;
-        // Ê×ÏÈÖÕÖ¹Event£¬²¢»Øµ÷to_Abortº¯Êý
+        // é¦–å…ˆç»ˆæ­¢Eventï¼Œå¹¶å›žè°ƒto_Abortå‡½æ•°
         i_old->second->to_Abort = true;
         i_old->second->Abort(m_time);
-        // Èç¹ûÊ¹ÓÃÁËÇ¿ÖÆ½áÊø»òÕßEvent¿ÉÒÔ±»É¾³ý
+        // å¦‚æžœä½¿ç”¨äº†å¼ºåˆ¶ç»“æŸæˆ–è€…Eventå¯ä»¥è¢«åˆ é™¤
         if (force || i_old->second->IsDeletable())
         {
             delete i_old->second;
