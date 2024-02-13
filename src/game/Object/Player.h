@@ -1877,11 +1877,11 @@ class Player : public Unit
         void SendAttackSwingDeadTarget();
         void SendAttackSwingNotStanding();
         /**
-         * @brief ÏòÍæ¼Ò·¢ËÍ¹¥»÷³¬³ö·¶Î§
+         * @brief å‘ç©å®¶å‘é€æ”»å‡»è¶…å‡ºèŒƒå›´
         */
         void SendAttackSwingNotInRange();
         /**
-         * @brief ÏòÍæ¼Ò·¢ËÍ±ØĞëÃæ¶ÔÄ¿±ê
+         * @brief å‘ç©å®¶å‘é€å¿…é¡»é¢å¯¹ç›®æ ‡
         */
         void SendAttackSwingBadFacingAttack();
         void SendAutoRepeatCancel();
@@ -2538,7 +2538,7 @@ class Player : public Unit
         PlayerSpellMap m_spells;
         SpellCooldowns m_spellCooldowns;
         /**
-         * @brief ¹«¹²CD¹ÜÀíÆ÷
+         * @brief å…¬å…±CDç®¡ç†å™¨
         */
         GlobalCooldownMgr m_GlobalCooldownMgr;
 
