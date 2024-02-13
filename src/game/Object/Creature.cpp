@@ -1253,25 +1253,25 @@ Player* Creature::GetLootRecipient() const
  */
 void Creature::SetLootRecipient(Unit* unit)
 {
-    // Îª¿ÕÊ±£¬Çå³ýÊ°È¡
+    // ä¸ºç©ºæ—¶ï¼Œæ¸…é™¤æ‹¾å–
     if (!unit)
     {
         m_lootRecipientGuid.Clear();
         m_lootGroupRecipientId = 0;
         return;
     }
-    // »ñÈ¡¿ØÖÆµ±Ç°µ¥Î»µÄÒýÓÃ£¨ÓÐ¿ÉÄÜÊÇÍæ¼Ò×ÔÉí£¬»òÕßÊÇÐÄ¿ØÍæ¼ÒµÄÍæ¼Ò£©
+    // èŽ·å–æŽ§åˆ¶å½“å‰å•ä½çš„å¼•ç”¨ï¼ˆæœ‰å¯èƒ½æ˜¯çŽ©å®¶è‡ªèº«ï¼Œæˆ–è€…æ˜¯å¿ƒæŽ§çŽ©å®¶çš„çŽ©å®¶ï¼‰
     Player* player = unit->GetCharmerOrOwnerPlayerOrPlayerItself();
-    // Èç¹û²»ÊÇÍæ¼Ò£¬²»ÉèÖÃÊ°È¡È¨
+    // å¦‚æžœä¸æ˜¯çŽ©å®¶ï¼Œä¸è®¾ç½®æ‹¾å–æƒ
     if (!player)                                            // normal creature, no player involved
     {
         return;
     }
 
-    // ÉèÖÃµ±Ç°Íæ¼Ò¾ßÓÐÊ°È¡È¨
+    // è®¾ç½®å½“å‰çŽ©å®¶å…·æœ‰æ‹¾å–æƒ
     m_lootRecipientGuid = player->GetObjectGuid();
 
-    // ÉèÖÃÍæ¼ÒËùÔÚ¶ÓÎé¾ßÓÐÊ°È¡È¨
+    // è®¾ç½®çŽ©å®¶æ‰€åœ¨é˜Ÿä¼å…·æœ‰æ‹¾å–æƒ
     if (Group* group = player->GetGroup())
     {
         m_lootGroupRecipientId = group->GetId();

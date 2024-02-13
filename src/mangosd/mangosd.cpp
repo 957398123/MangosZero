@@ -543,7 +543,7 @@ int main(int argc, char** argv)
 		cliThread = new CliThread(sConfig.GetBoolDefault("BeepAtStart", true));
 		cliThread->activate();
 	}
-
+	// 阻塞直到世界线程退出
 	worldThread->wait();
 
 	if (cliThread)
