@@ -515,28 +515,28 @@ void Map::VisitNearbyCellsOf(WorldObject* obj,
                              TypeContainerVisitor<MaNGOS::ObjectUpdater, GridTypeMapContainer> &gridVisitor,
                              TypeContainerVisitor<MaNGOS::ObjectUpdater, WorldTypeMapContainer> &worldVisitor)
 {
-    // Èç¹ûÊÀ½ç¶ÔÏó×ø±êÎŞĞ§£¬ºöÂÔ´¦Àí¡£
+    // å¦‚æœä¸–ç•Œå¯¹è±¡åæ ‡æ— æ•ˆï¼Œå¿½ç•¥å¤„ç†ã€‚
     if (!obj->IsPositionValid())
     {
         return;
     }
-    // »ñÈ¡ÊÀ½ç¶ÔÏó¿ÉÊÓ·¶Î§ÇøÓò
+    // è·å–ä¸–ç•Œå¯¹è±¡å¯è§†èŒƒå›´åŒºåŸŸ
     CellArea area = Cell::CalculateCellArea(obj->GetPositionX(), obj->GetPositionY(), GetVisibilityDistance());
-    // ±éÀú¸ÃÇøÓò
+    // éå†è¯¥åŒºåŸŸ
     for (uint32 x = area.low_bound.x_coord; x <= area.high_bound.x_coord; ++x)
     {
         for (uint32 y = area.low_bound.y_coord; y <= area.high_bound.y_coord; ++y)
         {
-            // »ñÈ¡µ±Ç°cell±êÊ¶
+            // è·å–å½“å‰cellæ ‡è¯†
             uint32 cell_id = (y * TOTAL_NUMBER_OF_CELLS_PER_MAP) + x;
-            // Èç¹ûÎ´¸üĞÂ£¬½øĞĞ¸üĞÂ
+            // å¦‚æœæœªæ›´æ–°ï¼Œè¿›è¡Œæ›´æ–°
             if (!isCellMarked(cell_id))
             {
-                // ±ê¼Çcell±»¸üĞÂ
+                // æ ‡è®°cellè¢«æ›´æ–°
                 markCell(cell_id);
-                // »ñÈ¡µ±Ç°cell×ø±ê
+                // è·å–å½“å‰cellåæ ‡
                 CellPair pair(x, y);
-                // ´´½¨cell
+                // åˆ›å»ºcell
                 Cell cell(pair);
                 cell.SetNoCreate();
                 Visit(cell, gridVisitor);
@@ -596,13 +596,13 @@ void Map::Update(const uint32& t_diff)
     {
         Player* plr = m_mapRefIter->getSource();
 
-        // Íæ¼Ò²»´æÔÚ»òÕßÍæ¼ÒÒÑ¾­µÇ³öÓÎÏ·£¬ºöÂÔ
+        // ç©å®¶ä¸å­˜åœ¨æˆ–è€…ç©å®¶å·²ç»ç™»å‡ºæ¸¸æˆï¼Œå¿½ç•¥
         if (!plr || !plr->IsInWorld())
         {
             continue;
         }
 
-        // ¸üĞÂÍæ¼Ò¿ÉÊÓ·¶Î§ÄÚĞÅÏ¢£¨AOI´¦Àí£©
+        // æ›´æ–°ç©å®¶å¯è§†èŒƒå›´å†…ä¿¡æ¯ï¼ˆAOIå¤„ç†ï¼‰
         VisitNearbyCellsOf(plr, grid_object_update, world_object_update);
 
         // Collect and remove references to creatures too far away from player's m_HostileRefManager
@@ -689,7 +689,7 @@ void Map::Update(const uint32& t_diff)
     {
         i_data->Update(t_diff);
     }
-    // ¸üĞÂÌìÆøÏµÍ³
+    // æ›´æ–°å¤©æ°”ç³»ç»Ÿ
     m_weatherSystem->UpdateWeathers(t_diff);
 }
 

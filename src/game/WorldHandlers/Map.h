@@ -198,14 +198,14 @@ class Map : public GridRefManager<NGridType>
 
         void resetMarkedCells() { marked_cells.reset(); }
         /**
-         * @brief µØÍ¼cellÊÇ·ñ±»¸üĞÂ
-         * @param pCellId cell±êÊ¶
+         * @brief åœ°å›¾cellæ˜¯å¦è¢«æ›´æ–°
+         * @param pCellId cellæ ‡è¯†
          * @return 
         */
         bool isCellMarked(uint32 pCellId) { return marked_cells.test(pCellId); }
         /**
-         * @brief ±ê¼ÇcellÒÑ±»¸üĞÂ
-         * @param pCellId cell±êÊ¶
+         * @brief æ ‡è®°cellå·²è¢«æ›´æ–°
+         * @param pCellId cellæ ‡è¯†
         */
         void markCell(uint32 pCellId) { marked_cells.set(pCellId); }
 
@@ -336,7 +336,7 @@ class Map : public GridRefManager<NGridType>
         }
 
         /**
-         * @brief ¸üĞÂobj¿ÉÊÓ·¶Î§ĞÅÏ¢
+         * @brief æ›´æ–°objå¯è§†èŒƒå›´ä¿¡æ¯
          * @param obj 
          * @param gridVisitor 
          * @param worldVisitor 
@@ -348,7 +348,7 @@ class Map : public GridRefManager<NGridType>
         bool isGridObjectDataLoaded(uint32 x, uint32 y) const { return getNGrid(x, y)->isGridObjectDataLoaded(); }
         void setGridObjectDataLoaded(bool pLoaded, uint32 x, uint32 y) { getNGrid(x, y)->setGridObjectDataLoaded(pLoaded); }
         /**
-         * @brief ÉèÖÃgrid
+         * @brief è®¾ç½®grid
          * @param grid 
          * @param x 
          * @param y 
@@ -385,7 +385,7 @@ class Map : public GridRefManager<NGridType>
         bool m_bLoadedGrids[MAX_NUMBER_OF_GRIDS][MAX_NUMBER_OF_GRIDS];
 
         /**
-         * @brief µØÍ¼cell±ê¼Ç
+         * @brief åœ°å›¾cellæ ‡è®°
         */
         std::bitset<TOTAL_NUMBER_OF_CELLS_PER_MAP* TOTAL_NUMBER_OF_CELLS_PER_MAP> marked_cells;
 
@@ -495,12 +495,12 @@ Map::Visit(const Cell& cell, TypeContainerVisitor<T, CONTAINER>& visitor)
     const uint32 y = cell.GridY();
     const uint32 cell_x = cell.CellX();
     const uint32 cell_y = cell.CellY();
-    // Èç¹ûcellÒÑ¾­´´½¨£¬»òÕß³É¹¦¼ÓÔØgrid
+    // å¦‚æœcellå·²ç»åˆ›å»ºï¼Œæˆ–è€…æˆåŠŸåŠ è½½grid
     if (!cell.NoCreate() || loaded(GridPair(x, y)))
     {
-        // È·±£grid±»¼ÓÔØ
+        // ç¡®ä¿gridè¢«åŠ è½½
         EnsureGridLoaded(cell);
-        // µ÷ÓÃgridµÄVisitº¯Êı
+        // è°ƒç”¨gridçš„Visitå‡½æ•°
         getNGrid(x, y)->Visit(cell_x, cell_y, visitor);
     }
 }
