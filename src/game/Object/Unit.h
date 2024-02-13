@@ -229,13 +229,13 @@ enum VictimState
 {
     VICTIMSTATE_UNAFFECTED     = 0,                         // seen in relation with HITINFO_MISS
     VICTIMSTATE_NORMAL         = 1,
-    VICTIMSTATE_DODGE          = 2,                         // ¶ãÉÁ
-    VICTIMSTATE_PARRY          = 3,                         // ÕĞ¼Ü
-    VICTIMSTATE_INTERRUPT      = 4,                         // ±»´ò¶Ï
-    VICTIMSTATE_BLOCKS         = 5,                         // ¸ñµ²
-    VICTIMSTATE_EVADES         = 6,                         // »Ø±Ü£¨±ÈÈç¹ÖÎïÎŞ·¨¹¥»÷Ä¿±ê»òÕßÍÑÕ½ÅÜ»ØÔ­Î»ÖÃµÄ¹ı³ÌÖĞ¾ÍÊÇ¸Ã×´Ì¬£©
-    VICTIMSTATE_IS_IMMUNE      = 7,                         // ÃâÒß
-    VICTIMSTATE_DEFLECTS       = 8                          // Æ«Ğ±
+    VICTIMSTATE_DODGE          = 2,                         // èº²é—ª
+    VICTIMSTATE_PARRY          = 3,                         // æ‹›æ¶
+    VICTIMSTATE_INTERRUPT      = 4,                         // è¢«æ‰“æ–­
+    VICTIMSTATE_BLOCKS         = 5,                         // æ ¼æŒ¡
+    VICTIMSTATE_EVADES         = 6,                         // å›é¿ï¼ˆæ¯”å¦‚æ€ªç‰©æ— æ³•æ”»å‡»ç›®æ ‡æˆ–è€…è„±æˆ˜è·‘å›åŸä½ç½®çš„è¿‡ç¨‹ä¸­å°±æ˜¯è¯¥çŠ¶æ€ï¼‰
+    VICTIMSTATE_IS_IMMUNE      = 7,                         // å…ç–«
+    VICTIMSTATE_DEFLECTS       = 8                          // åæ–œ
 };
 
 /**
@@ -254,7 +254,7 @@ enum HitInfo
     HITINFO_MISS                = 0x00000010,
     HITINFO_ABSORB              = 0x00000020,               // plays absorb sound
     HITINFO_RESIST              = 0x00000040,               // resisted atleast some damage
-    HITINFO_CRITICALHIT         = 0x00000080,               // ±©»÷
+    HITINFO_CRITICALHIT         = 0x00000080,               // æš´å‡»
     HITINFO_UNK8                = 0x00000100,               // wotlk?
     HITINFO_BLOCK               = 0x00000800,               // [ZERO]
     HITINFO_UNK9                = 0x00002000,               // wotlk?
@@ -790,28 +790,28 @@ struct CleanDamage
 struct CalcDamageInfo
 {
     /**
-     * @brief ¹¥»÷Õß
+     * @brief æ”»å‡»è€…
     */
     Unit*  attacker;
     /**
-     * @brief ±»¹¥»÷Õß
+     * @brief è¢«æ”»å‡»è€…
     */
     Unit*  target;
     SpellSchoolMask damageSchoolMask;
     /**
-     * @brief Êµ¼ÊÉËº¦
+     * @brief å®é™…ä¼¤å®³
     */
     uint32 damage;
     /**
-     * @brief ÎüÊÕÉËº¦£¨±ÈÈçÄÁÊ¦µÄ¶Ü¡¢·¨Ê¦µÄ¶Ü£©
+     * @brief å¸æ”¶ä¼¤å®³ï¼ˆæ¯”å¦‚ç‰§å¸ˆçš„ç›¾ã€æ³•å¸ˆçš„ç›¾ï¼‰
     */
     uint32 absorb;
     /**
-     * @brief µÖ¿¹ÉËº¦£¨Õë¶Ô·¨Êõ¼õÃâÉËº¦£©
+     * @brief æŠµæŠ—ä¼¤å®³ï¼ˆé’ˆå¯¹æ³•æœ¯å‡å…ä¼¤å®³ï¼‰
     */
     uint32 resist;
     /**
-     * @brief ¸ñµ²ÉËº¦£¨¸ñµ²ÉËº¦£©
+     * @brief æ ¼æŒ¡ä¼¤å®³ï¼ˆæ ¼æŒ¡ä¼¤å®³ï¼‰
     */
     uint32 blocked_amount;
     /**
@@ -825,7 +825,7 @@ struct CalcDamageInfo
      */
     uint32 TargetState;
     /**
-     * @brief ¹¥»÷ÀàĞÍ
+     * @brief æ”»å‡»ç±»å‹
     */
     WeaponAttackType attackType;
     /**
@@ -846,7 +846,7 @@ struct CalcDamageInfo
      */
     uint32 procEx;
     /**
-     * @brief ½öÓÃÓÚ¼ÆËã·ßÅ­Öµ
+     * @brief ä»…ç”¨äºè®¡ç®—æ„¤æ€’å€¼
     */
     uint32 cleanDamage;
     /// (Old comment) \todo remove this field (need use TargetState)
@@ -906,10 +906,10 @@ extern pAuraProcHandler AuraProcHandler[TOTAL_AURAS];
 
 enum CurrentSpellTypes
 {
-    CURRENT_MELEE_SPELL             = 0,  // µ±Ç°ÆÕÍ¨¹¥»÷
-    CURRENT_GENERIC_SPELL           = 1,  // µ±Ç°ÆÕÍ¨·¨Êõ
-    CURRENT_AUTOREPEAT_SPELL        = 2,  // µ±Ç°×Ô¶¯ÊÍ·Å·¨Êõ
-    CURRENT_CHANNELED_SPELL         = 3   // µ±Ç°Òıµ¼·¨Êõ
+    CURRENT_MELEE_SPELL             = 0,  // å½“å‰æ™®é€šæ”»å‡»
+    CURRENT_GENERIC_SPELL           = 1,  // å½“å‰æ™®é€šæ³•æœ¯
+    CURRENT_AUTOREPEAT_SPELL        = 2,  // å½“å‰è‡ªåŠ¨é‡Šæ”¾æ³•æœ¯
+    CURRENT_CHANNELED_SPELL         = 3   // å½“å‰å¼•å¯¼æ³•æœ¯
 };
 
 #define CURRENT_FIRST_NON_MELEE_SPELL 1
@@ -932,20 +932,20 @@ class GlobalCooldownMgr                                     // Shared by Player 
 
     public:
         /**
-         * @brief ²éÕÒ¸Ã·¨ÊõÊÇ·ñ´æÔÚ¹«¹²CD
+         * @brief æŸ¥æ‰¾è¯¥æ³•æœ¯æ˜¯å¦å­˜åœ¨å…¬å…±CD
          * @param spellInfo 
          * @return 
         */
         bool HasGlobalCooldown(SpellEntry const* spellInfo) const;
         /**
-         * @brief Ôö¼ÓÒ»¸ö·¨Êõ¹«¹²CD
-         * @param spellInfo ·¨ÊõÊµÌå
-         * @param gcd ¹«¹²CDÊ±¼ä
+         * @brief å¢åŠ ä¸€ä¸ªæ³•æœ¯å…¬å…±CD
+         * @param spellInfo æ³•æœ¯å®ä½“
+         * @param gcd å…¬å…±CDæ—¶é—´
         */
         void AddGlobalCooldown(SpellEntry const* spellInfo, uint32 gcd);
         /**
-         * @brief ÒÆ³ıÒ»¸ö·¨ÊõµÄ¹«¹²CD
-         * @param spellInfo ·¨ÊõÊµÌå
+         * @brief ç§»é™¤ä¸€ä¸ªæ³•æœ¯çš„å…¬å…±CD
+         * @param spellInfo æ³•æœ¯å®ä½“
         */
         void CancelGlobalCooldown(SpellEntry const* spellInfo);
 
@@ -1239,8 +1239,8 @@ class Unit : public WorldObject
          */
         uint32 getAttackTimer(WeaponAttackType type) const { return m_attackTimer[type]; }
         /**
-         * @brief ¼ì²éµ¥Î»ÊÇ·ñ¿ÉÒÔ½øĞĞÆÕÍ¨¹¥»÷
-         * @param type ¹¥»÷·½Ê½
+         * @brief æ£€æŸ¥å•ä½æ˜¯å¦å¯ä»¥è¿›è¡Œæ™®é€šæ”»å‡»
+         * @param type æ”»å‡»æ–¹å¼
          * @return 
         */
         bool isAttackReady(WeaponAttackType type = BASE_ATTACK) const { return m_attackTimer[type] == 0; }
@@ -1310,7 +1310,7 @@ class Unit : public WorldObject
          */
         bool CanReachWithMeleeAttack(Unit const* pVictim, float flat_mod = 0.0f) const;
         /**
-         * @brief ¶îÍâ¹¥»÷´ÎÊı
+         * @brief é¢å¤–æ”»å‡»æ¬¡æ•°
         */
         uint32 m_extraAttacks;
 
@@ -1354,10 +1354,10 @@ class Unit : public WorldObject
             return NULL;
         }
         /**
-         * @brief ³¢ÊÔ¹¥»÷Ö¸¶¨µ¥Î»£¬Í¬Ê±È·±£Í£Ö¹¹¥»÷µ±Ç°Ä¿±ê
-         * @param victim ¹¥»÷¶ÔÏó
-         * @param meleeAttack ÊÇ·ñ½üÕ½¹¥»÷
-         * @return ·¢Æğ¹¥»÷Îªtrue£¬ÆäËüfalse
+         * @brief å°è¯•æ”»å‡»æŒ‡å®šå•ä½ï¼ŒåŒæ—¶ç¡®ä¿åœæ­¢æ”»å‡»å½“å‰ç›®æ ‡
+         * @param victim æ”»å‡»å¯¹è±¡
+         * @param meleeAttack æ˜¯å¦è¿‘æˆ˜æ”»å‡»
+         * @return å‘èµ·æ”»å‡»ä¸ºtrueï¼Œå…¶å®ƒfalse
         */
         bool Attack(Unit* victim, bool meleeAttack);
         /**
@@ -1399,7 +1399,7 @@ class Unit : public WorldObject
          */
         bool isAttackingPlayer() const;
         /**
-         * @brief »ñÈ¡µ±Ç°¹¥»÷¶ÔÏó
+         * @brief è·å–å½“å‰æ”»å‡»å¯¹è±¡
          * @return 
         */
         Unit* getVictim() const { return m_attacking; }
@@ -1659,9 +1659,9 @@ class Unit : public WorldObject
          */
         void SetHealthPercent(float percent);
         /**
-         * @brief Í¨¹ı¸ø¶¨µÄÖµĞŞ¸ÄÑªÁ¿
-         * @param val ÒªĞŞ¸ÄÑªÁ¿Öµ£¬+100±íÊ¾Ôö¼Ó100£¬-100±íÊ¾¿Û³ı100ÑªÁ¿
-         * @return ĞŞ¸ÄºóÊ£ÓàÑªÁ¿£¬Ê¼ÖÕ´óÓÚµÈÓÚ0
+         * @brief é€šè¿‡ç»™å®šçš„å€¼ä¿®æ”¹è¡€é‡
+         * @param val è¦ä¿®æ”¹è¡€é‡å€¼ï¼Œ+100è¡¨ç¤ºå¢åŠ 100ï¼Œ-100è¡¨ç¤ºæ‰£é™¤100è¡€é‡
+         * @return ä¿®æ”¹åå‰©ä½™è¡€é‡ï¼Œå§‹ç»ˆå¤§äºç­‰äº0
         */
         int32 ModifyHealth(int32 val);
 
@@ -2066,7 +2066,7 @@ class Unit : public WorldObject
          */
         void DealMeleeDamage(CalcDamageInfo* damageInfo, bool durabilityLoss);
         /**
-         * @brief ´¦Àí·¨ÊõÉèÖÃµÄ¶îÍâ¹¥»÷
+         * @brief å¤„ç†æ³•æœ¯è®¾ç½®çš„é¢å¤–æ”»å‡»
          * @param victim 
         */
         void HandleProcExtraAttackFor(Unit* victim);
@@ -3149,7 +3149,7 @@ class Unit : public WorldObject
         }
         bool IsCharmerOrOwnerPlayerOrPlayerItself() const;
         /**
-         * @brief »ñÈ¡¿ØÖÆµ±Ç°µ¥Î»µÄÒıÓÃ
+         * @brief è·å–æ§åˆ¶å½“å‰å•ä½çš„å¼•ç”¨
          * @return 
         */
         Player* GetCharmerOrOwnerPlayerOrPlayerItself();
@@ -3384,8 +3384,8 @@ class Unit : public WorldObject
          */
         void RemoveAurasAtMechanicImmunity(uint32 mechMask, uint32 exceptSpellId, bool non_positive = false);
         /**
-         * @brief ÒÆ³ı¼¼ÄÜ²úÉúµÄ¹â»·
-         * @param auraType ¹â»·ÀàĞÍ
+         * @brief ç§»é™¤æŠ€èƒ½äº§ç”Ÿçš„å…‰ç¯
+         * @param auraType å…‰ç¯ç±»å‹
         */
         void RemoveSpellsCausingAura(AuraType auraType);
         /**
@@ -3816,7 +3816,7 @@ protected:
         void _UpdateAutoRepeatSpell();
         bool m_AutoRepeatFirstCast;
         /**
-         * @brief ¹¥»÷¼ä¸ô
+         * @brief æ”»å‡»é—´éš”
         */
         uint32 m_attackTimer[MAX_ATTACK];
 
@@ -3824,7 +3824,7 @@ protected:
 
         AttackerSet m_attackers;
         /**
-         * @brief ÕıÔÚ½»Õ½µÄµ¥Î»
+         * @brief æ­£åœ¨äº¤æˆ˜çš„å•ä½
         */
         Unit* m_attacking;
 

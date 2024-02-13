@@ -319,7 +319,7 @@ void Unit::Update(uint32 update_diff, uint32 p_time)
     // WARNING! Order of execution here is important, do not change.
     // Spells must be processed with event system BEFORE they go to _UpdateSpells.
     // Or else we may have some SPELL_STATE_FINISHED spells stalled in pointers, that is bad.
-    // ¸üĞÂÊÂ¼ş´¦ÀíÆ÷
+    // æ›´æ–°äº‹ä»¶å¤„ç†å™¨
     m_Events.Update(update_diff);
     _UpdateSpells(update_diff);
 
@@ -380,27 +380,27 @@ void Unit::Update(uint32 update_diff, uint32 p_time)
 
 bool Unit::UpdateMeleeAttackingState()
 {
-    // »ñÈ¡µ±Ç°½»Õ½µ¥Î»
+    // è·å–å½“å‰äº¤æˆ˜å•ä½
     Unit* victim = getVictim();
     if (!victim || IsNonMeleeSpellCasted(false))
     {
         return false;
     }
-    // Èç¹û½üÕ½¹¥»÷´¦ÓÚCDÖĞ£¬Ö±½Ó·µ»Ø¡£
+    // å¦‚æœè¿‘æˆ˜æ”»å‡»å¤„äºCDä¸­ï¼Œç›´æ¥è¿”å›ã€‚
     if (!isAttackReady(BASE_ATTACK) && !(isAttackReady(OFF_ATTACK) && haveOffhandWeapon()))
     {
         return false;
     }
 
     uint8 swingError = 0;
-    // Èç¹û½»Õ½µ¥Î»³¬¹ı¹¥»÷·¶Î§£¬¸´Î»¹¥»÷¼ä¸ô¡£
+    // å¦‚æœäº¤æˆ˜å•ä½è¶…è¿‡æ”»å‡»èŒƒå›´ï¼Œå¤ä½æ”»å‡»é—´éš”ã€‚
     if (!CanReachWithMeleeAttack(victim))
     {
         setAttackTimer(BASE_ATTACK, 100);
         setAttackTimer(OFF_ATTACK, 100);
         swingError = 1;
     }
-    // Èç¹û¹¥»÷Ê±Î´Ãæ¶Ô½»Õ½µ¥Î»£¬¸´Î»¹¥»÷¼ä¸ô¡£
+    // å¦‚æœæ”»å‡»æ—¶æœªé¢å¯¹äº¤æˆ˜å•ä½ï¼Œå¤ä½æ”»å‡»é—´éš”ã€‚
     else if (!HasInArc(2 * M_PI_F / 3, victim))
     {
         setAttackTimer(BASE_ATTACK, 100);
@@ -409,55 +409,55 @@ bool Unit::UpdateMeleeAttackingState()
     }
     else
     {
-        // Èç¹ûÖ÷ÊÖ¿ÉÒÔ¹¥»÷
+        // å¦‚æœä¸»æ‰‹å¯ä»¥æ”»å‡»
         if (isAttackReady(BASE_ATTACK))
         {
-            // Èç¹û×°±¸ÁË¸±ÊÖÎäÆ÷
+            // å¦‚æœè£…å¤‡äº†å‰¯æ‰‹æ­¦å™¨
             if (haveOffhandWeapon())
             {
-                // Èç¹û¸±ÊÖÎäÆ÷CDĞ¡ÓÚ0.2Ãë£¬¸´Î»Îª0.2Ãë¡£
+                // å¦‚æœå‰¯æ‰‹æ­¦å™¨CDå°äº0.2ç§’ï¼Œå¤ä½ä¸º0.2ç§’ã€‚
                 if (getAttackTimer(OFF_ATTACK) < ATTACK_DISPLAY_DELAY)
                 {
                     setAttackTimer(OFF_ATTACK, ATTACK_DISPLAY_DELAY);
                 }
             }
-            // ¸üĞÂÖ÷ÊÖ¹¥»÷
+            // æ›´æ–°ä¸»æ‰‹æ”»å‡»
             AttackerStateUpdate(victim, BASE_ATTACK);
-            // ÖØÖÃÖ÷ÊÖÎäÆ÷CD
+            // é‡ç½®ä¸»æ‰‹æ­¦å™¨CD
             resetAttackTimer(BASE_ATTACK);
         }
-        // Èç¹û¸±ÊÖ¿ÉÒÔ¹¥»÷
+        // å¦‚æœå‰¯æ‰‹å¯ä»¥æ”»å‡»
         if (haveOffhandWeapon() && isAttackReady(OFF_ATTACK))
         {
-            // »ñÈ¡Ö÷ÊÖÎäÆ÷CD
+            // è·å–ä¸»æ‰‹æ­¦å™¨CD
             uint32 base_att = getAttackTimer(BASE_ATTACK);
-            // Èç¹ûÖ÷ÊÖÎäÆ÷CDĞ¡ÓÚ0.2Ãë£¬¸´Î»Îª0.2Ãë¡£
+            // å¦‚æœä¸»æ‰‹æ­¦å™¨CDå°äº0.2ç§’ï¼Œå¤ä½ä¸º0.2ç§’ã€‚
             if (base_att < ATTACK_DISPLAY_DELAY)
             {
                 setAttackTimer(BASE_ATTACK, ATTACK_DISPLAY_DELAY);
             }
-            // ¸üĞÂ¸±ÊÖ¹¥»÷
+            // æ›´æ–°å‰¯æ‰‹æ”»å‡»
             AttackerStateUpdate(victim, OFF_ATTACK);
-            // ÖØÖÃ¸±ÊÖÎäÆ÷CD
+            // é‡ç½®å‰¯æ‰‹æ­¦å™¨CD
             resetAttackTimer(OFF_ATTACK);
         }
     }
-    // »ñÈ¡µ±Ç°µ¥Î»ÀàĞÍ
+    // è·å–å½“å‰å•ä½ç±»å‹
     Player* player = (GetTypeId() == TYPEID_PLAYER ? (Player*)this : NULL);
-    // Èç¹ûÊÇÍæ¼Ò£¬²¢ÇÒ¹¥»÷×´Ì¬Âë¸úÉÏÒ»´Î²»Ò»ÖÂ£¬·¢ËÍÏûÏ¢¸ø¿Í»§¶Ë¡£
+    // å¦‚æœæ˜¯ç©å®¶ï¼Œå¹¶ä¸”æ”»å‡»çŠ¶æ€ç è·Ÿä¸Šä¸€æ¬¡ä¸ä¸€è‡´ï¼Œå‘é€æ¶ˆæ¯ç»™å®¢æˆ·ç«¯ã€‚
     if (player && swingError != player->LastSwingErrorMsg())
     {
         if (swingError == 1)
         {
-            // ·¢ËÍ³¬³ö¹¥»÷·¶Î§ÏûÏ¢
+            // å‘é€è¶…å‡ºæ”»å‡»èŒƒå›´æ¶ˆæ¯
             player->SendAttackSwingNotInRange();
         }
         else if (swingError == 2)
         {
-            // ·¢ËÍ±ØĞëÃæ¶ÔÄ¿±êÏûÏ¢
+            // å‘é€å¿…é¡»é¢å¯¹ç›®æ ‡æ¶ˆæ¯
             player->SendAttackSwingBadFacingAttack();
         }
-        // ÉèÖÃ¹¥»÷×´Ì¬Âë
+        // è®¾ç½®æ”»å‡»çŠ¶æ€ç 
         player->SwingErrorMsg(swingError);
     }
 
@@ -618,36 +618,36 @@ uint32 Unit::DealDamage(Unit* pVictim, uint32 damage, CleanDamage const* cleanDa
     // remove affects from attacker at any non-DoT damage (including 0 damage)
     if (damagetype != DOT)
     {
-        // Èç¹ûÉËº¦ÀàĞÍ²»ÊÇÒşĞÎ×´Ì¬ÏÂÊÜµ½µÄµøÂäÉËº¦
+        // å¦‚æœä¼¤å®³ç±»å‹ä¸æ˜¯éšå½¢çŠ¶æ€ä¸‹å—åˆ°çš„è·Œè½ä¼¤å®³
         if (damagetype != SELF_DAMAGE_ROGUE_FALL)
         {
-            // ÒÆ³ıÒşÉí¹â»·
+            // ç§»é™¤éšèº«å…‰ç¯
             RemoveSpellsCausingAura(SPELL_AURA_MOD_STEALTH);
         }
-        // ÒÆ³ı¼ÙËÀ¹â»·
+        // ç§»é™¤å‡æ­»å…‰ç¯
         RemoveSpellsCausingAura(SPELL_AURA_FEIGN_DEATH);
-        // Èç¹û±»¹¥»÷ÕßÊÇÍæ¼Ò£¬²¢ÇÒ²»´¦ÓÚÕ¾Á¢×´Ì¬£¨±ÈÈçË¯¾õ¡¢×ø¡¢¹ò¡¢±»»÷ÔÎµÈ£©
+        // å¦‚æœè¢«æ”»å‡»è€…æ˜¯ç©å®¶ï¼Œå¹¶ä¸”ä¸å¤„äºç«™ç«‹çŠ¶æ€ï¼ˆæ¯”å¦‚ç¡è§‰ã€åã€è·ªã€è¢«å‡»æ™•ç­‰ï¼‰
         if (pVictim->GetTypeId() == TYPEID_PLAYER && !pVictim->IsStandState() && !pVictim->hasUnitState(UNIT_STAT_STUNNED))
         {
-            // ÉèÖÃÍæ¼Ò´¦ÓÚÕ¾Á¢×´Ì¬
+            // è®¾ç½®ç©å®¶å¤„äºç«™ç«‹çŠ¶æ€
             pVictim->SetStandState(UNIT_STAND_STATE_STAND);
         }
     }
-    // Èç¹ûÊÇ0ÉËº¦
+    // å¦‚æœæ˜¯0ä¼¤å®³
     if (!damage)
     {
         // Rage from physical damage received .
         if (cleanDamage && cleanDamage->damage && (damageSchoolMask & SPELL_SCHOOL_MASK_NORMAL) && pVictim->GetTypeId() == TYPEID_PLAYER && (pVictim->GetPowerType() == POWER_RAGE))
         {
-            // Èç¹û±»¹¥»÷ÕßÊÇÕ½Ê¿£¬¸øÆäÔö¼ÓÅ­ÆøÖµ
+            // å¦‚æœè¢«æ”»å‡»è€…æ˜¯æˆ˜å£«ï¼Œç»™å…¶å¢åŠ æ€’æ°”å€¼
             ((Player*)pVictim)->RewardRage(cleanDamage->damage, false);
         }
-        // ´¦Àí½áÊø
+        // å¤„ç†ç»“æŸ
         return 0;
     }
 
     DEBUG_FILTER_LOG(LOG_FILTER_DAMAGE, "DealDamageStart");
-    // »ñÈ¡±»¹¥»÷Õßµ±Ç°ÑªÁ¿
+    // è·å–è¢«æ”»å‡»è€…å½“å‰è¡€é‡
     uint32 health = pVictim->GetHealth();
     DEBUG_FILTER_LOG(LOG_FILTER_DAMAGE, "deal dmg:%d to health:%d ", damage, health);
 
@@ -655,11 +655,11 @@ uint32 Unit::DealDamage(Unit* pVictim, uint32 damage, CleanDamage const* cleanDa
     // Rage from Damage made (only from direct weapon damage)
     if (cleanDamage && damagetype == DIRECT_DAMAGE && this != pVictim && GetTypeId() == TYPEID_PLAYER && GetPowerType() == POWER_RAGE && cleanDamage->attackType != RANGED_ATTACK)
     {
-        // Èç¹û¹¥»÷ÕßÊÇÕ½Ê¿£¬¸øÆäÔö¼ÓÅ­ÆøÖµ
+        // å¦‚æœæ”»å‡»è€…æ˜¯æˆ˜å£«ï¼Œç»™å…¶å¢åŠ æ€’æ°”å€¼
         ((Player*)this)->RewardRage(damage, true);
     }
 
-    // Èç¹û¹¥»÷µÄÊÇĞ¡¶¯Îï
+    // å¦‚æœæ”»å‡»çš„æ˜¯å°åŠ¨ç‰©
     if (pVictim->GetTypeId() == TYPEID_UNIT && pVictim->GetCreatureType() == CREATURE_TYPE_CRITTER)
     {
         // TODO: fix this part
@@ -677,25 +677,25 @@ uint32 Unit::DealDamage(Unit* pVictim, uint32 damage, CleanDamage const* cleanDa
         return damage;
     }
 
-    // Èç¹ûÊÇÔÚ¾ö¶·ÖĞ£¬ÉËº¦³¬¹ıÍæ¼ÒÊ£ÓàÑªÁ¿-1£¬¾ö¶·½áÊø
+    // å¦‚æœæ˜¯åœ¨å†³æ–—ä¸­ï¼Œä¼¤å®³è¶…è¿‡ç©å®¶å‰©ä½™è¡€é‡-1ï¼Œå†³æ–—ç»“æŸ
     bool duel_hasEnded = false;
     if (pVictim->GetTypeId() == TYPEID_PLAYER && ((Player*)pVictim)->duel && damage >= (health - 1))
     {
         // prevent kill only if killed in duel and killed by opponent or opponent controlled creature
         if (((Player*)pVictim)->duel->opponent == this || ((Player*)pVictim)->duel->opponent->GetObjectGuid() == GetOwnerGuid())
         {
-            // µ÷ÕûÉËº¦
+            // è°ƒæ•´ä¼¤å®³
             damage = health - 1;
         }
         duel_hasEnded = true;
     }
 
-    // Èç¹û×Ô¼º²»ÊÇÊÜº¦Õß£¬ÇÒÉËº¦ÀàĞÍ²»ÊÇDOT£¬Á¢¼´Ê¹ÊÜº¦Õß½øÈëÕ½¶·×´Ì¬
+    // å¦‚æœè‡ªå·±ä¸æ˜¯å—å®³è€…ï¼Œä¸”ä¼¤å®³ç±»å‹ä¸æ˜¯DOTï¼Œç«‹å³ä½¿å—å®³è€…è¿›å…¥æˆ˜æ–—çŠ¶æ€
     if (pVictim != this && damagetype != DOT)
     {
-        // ÉèÖÃÊÜº¦Õß½øÈçÕ½¶·×´Ì¬
+        // è®¾ç½®å—å®³è€…è¿›å¦‚æˆ˜æ–—çŠ¶æ€
         SetInCombatWith(pVictim);
-        // ½«×ÔÉí¼ÓÈëÊÜº¦ÕßµÄ³ğºŞÁĞ±í
+        // å°†è‡ªèº«åŠ å…¥å—å®³è€…çš„ä»‡æ¨åˆ—è¡¨
         pVictim->SetInCombatWith(this);
 
         if (Player* attackedPlayer = pVictim->GetCharmerOrOwnerPlayerOrPlayerItself())
@@ -703,13 +703,13 @@ uint32 Unit::DealDamage(Unit* pVictim, uint32 damage, CleanDamage const* cleanDa
             SetContestedPvP(attackedPlayer);
         }
     }
-    // Èç¹ûÊÜº¦ÕßÊÇÉúÎïÀàĞÍ
+    // å¦‚æœå—å®³è€…æ˜¯ç”Ÿç‰©ç±»å‹
     if (Creature* victim = pVictim->ToCreature())
     {
-        // Èç¹ûÊÜº¦Õß²»ÊÇ³èÎï²¢ÇÒ¿ÉÒÔ»ñÈ¡Ê°È¡È¨
+        // å¦‚æœå—å®³è€…ä¸æ˜¯å® ç‰©å¹¶ä¸”å¯ä»¥è·å–æ‹¾å–æƒ
         if (!victim->IsPet() && !victim->HasLootRecipient())
         {
-            // ÉèÖÃÊ°È¡È¨
+            // è®¾ç½®æ‹¾å–æƒ
             victim->SetLootRecipient(this);
         }
 
@@ -718,21 +718,21 @@ uint32 Unit::DealDamage(Unit* pVictim, uint32 damage, CleanDamage const* cleanDa
             victim->LowerPlayerDamageReq(health < damage ? health : damage);
         }
     }
-    // Èç¹ûÉËº¦ÉÙÓÚÑªÁ¿
+    // å¦‚æœä¼¤å®³å°‘äºè¡€é‡
     if (health <= damage)
     {
         DEBUG_FILTER_LOG(LOG_FILTER_DAMAGE, "DealDamage %s Killed %s", GetGuidStr().c_str(), pVictim->GetGuidStr().c_str());
 
-        // ¼ÆËãÊ°È¡È¨
+        // è®¡ç®—æ‹¾å–æƒ
         Player* player_tap = GetCharmerOrOwnerPlayerOrPlayerItself();
         Group* group_tap = NULL;
 
         // in creature kill case group/player tap stored for creature
         if (pVictim->GetTypeId() == TYPEID_UNIT)
         {
-            // »ñÈ¡ÓµÓĞÊÜº¦ÕßÊ°È¡È¨µÄĞ¡¶Ó
+            // è·å–æ‹¥æœ‰å—å®³è€…æ‹¾å–æƒçš„å°é˜Ÿ
             group_tap = ((Creature*)pVictim)->GetGroupLootRecipient();
-            // »ñÈ¡ÓµÓĞÊÜº¦ÕßÔ­Ê¼Ê°È¡È¨µÄÍæ¼Ò£¨Ôì³ÉÊ×´ÎÉËº¦µÄÍæ¼Ò£©
+            // è·å–æ‹¥æœ‰å—å®³è€…åŸå§‹æ‹¾å–æƒçš„ç©å®¶ï¼ˆé€ æˆé¦–æ¬¡ä¼¤å®³çš„ç©å®¶ï¼‰
             if (Player* recipient = ((Creature*)pVictim)->GetOriginalLootRecipient())
             {
                 player_tap = recipient;
@@ -937,18 +937,18 @@ uint32 Unit::DealDamage(Unit* pVictim, uint32 damage, CleanDamage const* cleanDa
             JustKilledCreature((Creature*)pVictim, player_tap);
         }
     }
-    else                                                    // Èç¹ûÉËº¦´óÓÚÊ£ÓàÑªÁ¿
+    else                                                    // å¦‚æœä¼¤å®³å¤§äºå‰©ä½™è¡€é‡
     {
         DEBUG_FILTER_LOG(LOG_FILTER_DAMAGE, "DealDamageAlive");
-        // ¼õÉÙ±»¹¥»÷ÕßÑªÁ¿
+        // å‡å°‘è¢«æ”»å‡»è€…è¡€é‡
         pVictim->ModifyHealth(- (int32)damage);
-        // Èç¹ûÉËº¦ÀàĞÍ²»ÊÇDOT
+        // å¦‚æœä¼¤å®³ç±»å‹ä¸æ˜¯DOT
         if (damagetype != DOT)
         {
             if (!getVictim())
             {
                 // if not have main target then attack state with target (including AI call)
-                // Ö»ÓĞ½üÕ½ÃüÖĞºó²Å¿ªÊ¼¹¥»÷
+                // åªæœ‰è¿‘æˆ˜å‘½ä¸­åæ‰å¼€å§‹æ”»å‡»
                 Attack(pVictim, (damagetype == DIRECT_DAMAGE));
             }
 
@@ -1967,7 +1967,7 @@ void Unit::DealMeleeDamage(CalcDamageInfo* damageInfo, bool durabilityLoss)
     {
         return;
     }
-    // Èç¹û±»¹¥»÷µ¥Î»ËÀÍö¡¢´¦ÓÚ·ÉĞĞÂÃĞĞ×´Ì¬£¨Äñµã·ÉĞĞÖĞ£©¡¢»Ø±ÜÄ£Ê½£¬ºöÂÔ´¦Àí¡£
+    // å¦‚æœè¢«æ”»å‡»å•ä½æ­»äº¡ã€å¤„äºé£è¡Œæ—…è¡ŒçŠ¶æ€ï¼ˆé¸Ÿç‚¹é£è¡Œä¸­ï¼‰ã€å›é¿æ¨¡å¼ï¼Œå¿½ç•¥å¤„ç†ã€‚
     if (!pVictim->IsAlive() || pVictim->IsTaxiFlying() || (pVictim->GetTypeId() == TYPEID_UNIT && ((Creature*)pVictim)->IsInEvadeMode()))
     {
         return;
@@ -1976,58 +1976,58 @@ void Unit::DealMeleeDamage(CalcDamageInfo* damageInfo, bool durabilityLoss)
     // Hmmmm dont like this emotes client must by self do all animations
     if (damageInfo->HitInfo & HITINFO_CRITICALHIT)
     {
-        // ÏÔÊ¾±»¹¥»÷Õß±»±©»÷¶¯»­£¨¹ã²¥¸ø±»¹¥»÷ÕßËùÔÚCellÇøÓòµÄÍæ¼Ò£©
+        // æ˜¾ç¤ºè¢«æ”»å‡»è€…è¢«æš´å‡»åŠ¨ç”»ï¼ˆå¹¿æ’­ç»™è¢«æ”»å‡»è€…æ‰€åœ¨CellåŒºåŸŸçš„ç©å®¶ï¼‰
         pVictim->HandleEmoteCommand(EMOTE_ONESHOT_WOUNDCRITICAL);
     }
-    // Èç¹ûÉËº¦ÓĞ±»¸ñµ²µ«ÊÇ±»¹¥»÷Õß²»´¦ÓÚ¸ñµ²×´Ì¬£¬¹ã²¥±»¹¥»÷Õß¸ñµ²¶¯»­¡£
+    // å¦‚æœä¼¤å®³æœ‰è¢«æ ¼æŒ¡ä½†æ˜¯è¢«æ”»å‡»è€…ä¸å¤„äºæ ¼æŒ¡çŠ¶æ€ï¼Œå¹¿æ’­è¢«æ”»å‡»è€…æ ¼æŒ¡åŠ¨ç”»ã€‚
     if (damageInfo->blocked_amount && damageInfo->TargetState != VICTIMSTATE_BLOCKS)
     {
         pVictim->HandleEmoteCommand(EMOTE_ONESHOT_PARRYSHIELD);
     }
 
-    // Èç¹û¹¥»÷±»ÕĞ¼Ü
+    // å¦‚æœæ”»å‡»è¢«æ‹›æ¶
     if (damageInfo->TargetState == VICTIMSTATE_PARRY)
     {
-        // Èç¹ûÉúÎïÄÜ¹»ÔÚÕĞ¼ÜÊ±½øĞĞ·´»÷
+        // å¦‚æœç”Ÿç‰©èƒ½å¤Ÿåœ¨æ‹›æ¶æ—¶è¿›è¡Œåå‡»
         if (pVictim->GetTypeId() != TYPEID_UNIT ||
             !(((Creature*)pVictim)->GetCreatureInfo()->ExtraFlags & CREATURE_FLAG_EXTRA_NO_PARRY_HASTEN))
         {
-            // »ñÈ¡Ö÷ÊÖÎäÆ÷ºÍ¸±ÊÖÎäÆ÷CD
+            // è·å–ä¸»æ‰‹æ­¦å™¨å’Œå‰¯æ‰‹æ­¦å™¨CD
             float offtime = float(pVictim->getAttackTimer(OFF_ATTACK));
             float basetime = float(pVictim->getAttackTimer(BASE_ATTACK));
-            // Èç¹û×°±¸ÁË¸±ÊÖÎäÆ÷²¢ÇÒ¸±ÊÖÎäÆ÷CD±ÈÖ÷ÊÖÎäÆ÷CDÉÙ
+            // å¦‚æœè£…å¤‡äº†å‰¯æ‰‹æ­¦å™¨å¹¶ä¸”å‰¯æ‰‹æ­¦å™¨CDæ¯”ä¸»æ‰‹æ­¦å™¨CDå°‘
             if (pVictim->haveOffhandWeapon() && offtime < basetime)
             {
-                // »ñÈ¡¸±ÊÖÎäÆ÷¹¥ËÙ
+                // è·å–å‰¯æ‰‹æ­¦å™¨æ”»é€Ÿ
                 float percent20 = pVictim->GetAttackTime(OFF_ATTACK) * 0.20f;
                 float percent60 = 3.0f * percent20;
-                // Èç¹û¸±ÊÖÎäÆ÷CDÔÚ¹¥ËÙ20%ÖÁ60%Ö®¼ä
+                // å¦‚æœå‰¯æ‰‹æ­¦å™¨CDåœ¨æ”»é€Ÿ20%è‡³60%ä¹‹é—´
                 if (offtime > percent20 && offtime <= percent60)
                 {
-                    // ÉèÖÃ¸±ÊÖÎäÆ÷CDÎª¹¥ËÙ20%
+                    // è®¾ç½®å‰¯æ‰‹æ­¦å™¨CDä¸ºæ”»é€Ÿ20%
                     pVictim->setAttackTimer(OFF_ATTACK, uint32(percent20));
                 }
-                // Èç¹û¸±ÊÖÎäÆ÷CD´óÓÚ¹¥ËÙ60%
+                // å¦‚æœå‰¯æ‰‹æ­¦å™¨CDå¤§äºæ”»é€Ÿ60%
                 else if (offtime > percent60)
                 {
-                    // ¼õÈ¥¸±ÊÖÎäÆ÷¹¥ËÙ40%CD
+                    // å‡å»å‰¯æ‰‹æ­¦å™¨æ”»é€Ÿ40%CD
                     offtime -= 2.0f * percent20;
                     pVictim->setAttackTimer(OFF_ATTACK, uint32(offtime));
                 }
             }
             else
             {
-                // »ñÈ¡Ö÷ÊÖÎäÆ÷¹¥ËÙ
+                // è·å–ä¸»æ‰‹æ­¦å™¨æ”»é€Ÿ
                 float percent20 = pVictim->GetAttackTime(BASE_ATTACK) * 0.20f;
                 float percent60 = 3.0f * percent20;
                 if (basetime > percent20 && basetime <= percent60)
                 {
-                    // ÉèÖÃÖ÷ÊÖÎäÆ÷CDÎª¹¥ËÙ20%
+                    // è®¾ç½®ä¸»æ‰‹æ­¦å™¨CDä¸ºæ”»é€Ÿ20%
                     pVictim->setAttackTimer(BASE_ATTACK, uint32(percent20));
                 }
                 else if (basetime > percent60)
                 {
-                    // ¼õÈ¥Ö÷ÊÖÎäÆ÷¹¥ËÙ40%CD
+                    // å‡å»ä¸»æ‰‹æ­¦å™¨æ”»é€Ÿ40%CD
                     basetime -= 2.0f * percent20;
                     pVictim->setAttackTimer(BASE_ATTACK, uint32(basetime));
                 }
@@ -2037,7 +2037,7 @@ void Unit::DealMeleeDamage(CalcDamageInfo* damageInfo, bool durabilityLoss)
 
     // Call default DealDamage
     CleanDamage cleanDamage(damageInfo->cleanDamage, damageInfo->attackType, damageInfo->hitOutCome);
-    // ´¦Àí°××ÖÎäÆ÷ÉËº¦
+    // å¤„ç†ç™½å­—æ­¦å™¨ä¼¤å®³
     DealDamage(pVictim, damageInfo->damage, &cleanDamage, DIRECT_DAMAGE, SpellSchoolMask(damageInfo->damageSchoolMask), NULL, durabilityLoss);
 
     // If this is a creature and it attacks from behind it has a probability to daze it's victim
@@ -2518,51 +2518,51 @@ void Unit::AttackerStateUpdate(Unit* pVictim, WeaponAttackType attType, bool ext
 
     uint32 extraAttacks = m_extraAttacks;
 
-    // ½üÕ½¹¥»÷·¨ÊõÖ»ÄÜÔÚÖ÷ÊÖ¹¥»÷Ê±ÊÍ·Å£¨½üÕ½·¨ÊõÌæ´úÆÕÍ¨¹¥»÷£¬±ÈÈçÕ½Ê¿µÄÓ¢ÓÂ´ò»÷£©
+    // è¿‘æˆ˜æ”»å‡»æ³•æœ¯åªèƒ½åœ¨ä¸»æ‰‹æ”»å‡»æ—¶é‡Šæ”¾ï¼ˆè¿‘æˆ˜æ³•æœ¯æ›¿ä»£æ™®é€šæ”»å‡»ï¼Œæ¯”å¦‚æˆ˜å£«çš„è‹±å‹‡æ‰“å‡»ï¼‰
     if (attType == BASE_ATTACK && m_currentSpells[CURRENT_MELEE_SPELL])
     {
-        // ÊÍ·Å½üÕ½·¨Êõ
+        // é‡Šæ”¾è¿‘æˆ˜æ³•æœ¯
         m_currentSpells[CURRENT_MELEE_SPELL]->cast();
 
         // not recent extra attack only at any non extra attack (melee spell case)
         if (!extra && extraAttacks)
         {
-            // ´¦Àí¶îÍâ¹¥»÷
+            // å¤„ç†é¢å¤–æ”»å‡»
             HandleProcExtraAttackFor(pVictim);
         }
-        // Ö±½Ó·µ»Ø£¬²»´¥·¢ÆÕÍ¨¹¥»÷
+        // ç›´æ¥è¿”å›ï¼Œä¸è§¦å‘æ™®é€šæ”»å‡»
         return;
     }
 
     RemoveAurasWithInterruptFlags(AURA_INTERRUPT_FLAG_MELEE_ATTACK);
-    // ¼ÆËãÉËº¦
+    // è®¡ç®—ä¼¤å®³
     CalcDamageInfo damageInfo;
-    // ¸ù¾İ¹¥»÷ÀàĞÍ¼ÆËãÉËº¦
+    // æ ¹æ®æ”»å‡»ç±»å‹è®¡ç®—ä¼¤å®³
     CalculateMeleeDamage(pVictim, &damageInfo, attType);
-    // ÉËº¦Ä£ĞÍ´¦Àí£¨±ÈÈçÉúÎïËÀÍö¾Í²»Ôì³ÉÉËº¦£©
+    // ä¼¤å®³æ¨¡å‹å¤„ç†ï¼ˆæ¯”å¦‚ç”Ÿç‰©æ­»äº¡å°±ä¸é€ æˆä¼¤å®³ï¼‰
     DealDamageMods(pVictim, damageInfo.damage, &damageInfo.absorb);
-    // ½«ÉËº¦ĞÅÏ¢¹ã²¥¸øµØÍ¼ÆäËûÍæ¼Ò
+    // å°†ä¼¤å®³ä¿¡æ¯å¹¿æ’­ç»™åœ°å›¾å…¶ä»–ç©å®¶
     SendAttackStateUpdate(&damageInfo);
     ProcDamageAndSpell(damageInfo.target, damageInfo.procAttacker, damageInfo.procVictim, damageInfo.procEx, damageInfo.damage, damageInfo.attackType);
-    // ´¦Àí¹¥»÷ÉËº¦£¨¼ÆËãÄÍ¾Ã£©
+    // å¤„ç†æ”»å‡»ä¼¤å®³ï¼ˆè®¡ç®—è€ä¹…ï¼‰
     DealMeleeDamage(&damageInfo, true);
-    // ÈÕÖ¾Êä³ö
+    // æ—¥å¿—è¾“å‡º
     DEBUG_FILTER_LOG(LOG_FILTER_COMBAT, "AttackerStateUpdate: %s attacked %s for %u dmg, absorbed %u, blocked %u, resisted %u.",
                      GetGuidStr().c_str(), pVictim->GetGuidStr().c_str(), damageInfo.damage, damageInfo.absorb, damageInfo.blocked_amount, damageInfo.resist);
 
-    // ³èÎïÖ÷ÈËÔÚ³èÎï·¢Æğ¹¥»÷Ê±Ò²½øÈëÕ½¶·
+    // å® ç‰©ä¸»äººåœ¨å® ç‰©å‘èµ·æ”»å‡»æ—¶ä¹Ÿè¿›å…¥æˆ˜æ–—
     if (Unit* owner = GetOwner())
     {
         owner->AddThreat(pVictim);
         owner->SetInCombatWith(pVictim);
-        // ³èÎïÖ÷ÈË¼ÓÈë±»¹¥»÷ÕßµÄ³ğºŞÁĞ±í
+        // å® ç‰©ä¸»äººåŠ å…¥è¢«æ”»å‡»è€…çš„ä»‡æ¨åˆ—è¡¨
         pVictim->SetInCombatWith(owner);
     }
 
-    // ´¥·¢½»Õ½ÕßµÄAI´¦Àí£¬±ÈÈçÒ»¸öÉúÎï¹¥»÷ÁËÁíÒ»¸öÉúÎï£¨Íæ¼Ò³ıÍâ£©£¬±»¹¥»÷Õß´¥·¢AI´¦Àí¡£
+    // è§¦å‘äº¤æˆ˜è€…çš„AIå¤„ç†ï¼Œæ¯”å¦‚ä¸€ä¸ªç”Ÿç‰©æ”»å‡»äº†å¦ä¸€ä¸ªç”Ÿç‰©ï¼ˆç©å®¶é™¤å¤–ï¼‰ï¼Œè¢«æ”»å‡»è€…è§¦å‘AIå¤„ç†ã€‚
     pVictim->AttackedBy(this);
 
-    // ´¦Àí¶îÍâ¹¥»÷
+    // å¤„ç†é¢å¤–æ”»å‡»
     if (!extra && extraAttacks)
     {
         HandleProcExtraAttackFor(pVictim);
@@ -2571,7 +2571,7 @@ void Unit::AttackerStateUpdate(Unit* pVictim, WeaponAttackType attType, bool ext
 
 void Unit::HandleProcExtraAttackFor(Unit* victim)
 {
-    // ´¦Àí·¨ÊõÉèÖÃµÄ¶îÍâ¹¥»÷
+    // å¤„ç†æ³•æœ¯è®¾ç½®çš„é¢å¤–æ”»å‡»
     while (m_extraAttacks)
     {
         --m_extraAttacks;
@@ -9977,7 +9977,7 @@ Player* Unit::GetSpellModOwner() const
     {
         return (Player*)this;
     }
-    // Èç¹ûÊÇ³èÎï»òÕßÍ¼ÌÚ£¬ÕÒµ½ËüµÄËùÓĞÕß¡£
+    // å¦‚æœæ˜¯å® ç‰©æˆ–è€…å›¾è…¾ï¼Œæ‰¾åˆ°å®ƒçš„æ‰€æœ‰è€…ã€‚
     if (((Creature*)this)->IsPet() || ((Creature*)this)->IsTotem())
     {
         Unit* owner = GetOwner();
