@@ -7357,9 +7357,19 @@ bool Player::CanUseCapturePoint()
            !isGameMaster();
 }
 
+void Player::SetXP(uint32 xp)
+{
+    SetUInt32Value(PLAYER_XP, xp);
+}
+
 uint32 Player::GetXP()
 {
     return GetUInt32Value(PLAYER_XP);
+}
+
+uint32 Player::GetXPForNextLevel()
+{
+    return GetUInt32Value(PLAYER_NEXT_LEVEL_XP);
 }
 
 void Player::UpdateZone(uint32 newZone, uint32 newArea)

@@ -2230,10 +2230,23 @@ class Player : public Unit
         bool CanUseCapturePoint();
 
         /**
+         * @brief 设置当前玩家经验值
+         * @param xp 
+         * @return 
+         */
+        void SetXP(uint32 xp);
+
+        /**
          * @brief 获取玩家当前经验值
          * @return 
          */
         uint32 GetXP();
+
+        /**
+         * @brief 获取当前玩家升级到下一级的经验值
+         * @return 
+         */
+        uint32 GetXPForNextLevel();
 
         /*********************************************************/
         /***                    REST SYSTEM                    ***/

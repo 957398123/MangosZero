@@ -966,6 +966,13 @@ namespace LuaPlayer
         return 1;
     }
 
+    int SetXP(lua_State* L, Player* player)
+    {
+        uint32 xp = Eluna::CHECKVAL<uint32>(L, 2);
+        player->SetXP(xp);
+        return 0;
+    }
+
     /**
      * @brief 获取玩家当前经验值
      * @param L 
@@ -975,6 +982,18 @@ namespace LuaPlayer
     int GetXP(lua_State* L, Player* player)
     {
         Eluna::Push(L, player->GetXP());
+        return 1;
+    }
+
+    /**
+     * @brief 获取玩家升级到下一级的经验值
+     * @param L 
+     * @param player 
+     * @return 
+     */
+    int GetXPForNextLevel(lua_State* L, Player* player)
+    {
+        Eluna::Push(L, player->GetXPForNextLevel());
         return 1;
     }
 
@@ -4377,6 +4396,7 @@ namespace LuaPlayer
         { "GetQuestRewardStatus", &LuaPlayer::GetQuestRewardStatus },
         { "GetShieldBlockValue", &LuaPlayer::GetShieldBlockValue },
         { "GetXP", &LuaPlayer::GetXP },
+        { "GetXPForNextLevel", &LuaPlayer::GetXPForNextLevel },
 #if defined(CLASSIC)
         { "GetHonorStoredKills", &LuaPlayer::GetHonorStoredKills },
         { "GetRankPoints", &LuaPlayer::GetRankPoints },
@@ -4420,6 +4440,7 @@ namespace LuaPlayer
         { "SetPlayerLock", &LuaPlayer::SetPlayerLock },
         { "SetGender", &LuaPlayer::SetGender },
         { "SetSheath", &LuaPlayer::SetSheath },
+        { "SetXP", &LuaPlayer::SetXP },
 #if defined(CLASSIC)
         { "SetHonorStoredKills", &LuaPlayer::SetHonorStoredKills },
         { "SetRankPoints", &LuaPlayer::SetRankPoints },
