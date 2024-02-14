@@ -2229,6 +2229,12 @@ class Player : public Unit
         // returns true if the player is in active state for capture point capturing
         bool CanUseCapturePoint();
 
+        /**
+         * @brief 获取玩家当前经验值
+         * @return 
+         */
+        uint32 GetXP();
+
         /*********************************************************/
         /***                    REST SYSTEM                    ***/
         /*********************************************************/

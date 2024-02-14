@@ -7357,6 +7357,11 @@ bool Player::CanUseCapturePoint()
            !isGameMaster();
 }
 
+uint32 Player::GetXP()
+{
+    return GetUInt32Value(PLAYER_XP);
+}
+
 void Player::UpdateZone(uint32 newZone, uint32 newArea)
 {
     /* If we're trying to update into a zone that doesn't exist, just return */

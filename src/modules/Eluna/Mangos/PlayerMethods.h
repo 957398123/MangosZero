@@ -7,6 +7,14 @@
 #ifndef PLAYERMETHODS_H
 #define PLAYERMETHODS_H
 
+#include "lauxlib.h"
+#include "LuaEngine.h"
+#include "ElunaIncludes.h"
+#include "ElunaTemplate.h"
+
+struct lua_State;
+class Player;
+
 /***
  * Inherits all methods from: [Object], [WorldObject], [Unit]
  */
@@ -955,6 +963,18 @@ namespace LuaPlayer
         uint32 xp = Eluna::CHECKVAL<uint32>(L, 2);
 
         Eluna::Push(L, player->GetXPRestBonus(xp));
+        return 1;
+    }
+
+    /**
+     * @brief 获取玩家当前经验值
+     * @param L 
+     * @param player 
+     * @return 
+     */
+    int GetXP(lua_State* L, Player* player)
+    {
+        Eluna::Push(L, player->GetXP());
         return 1;
     }
 
@@ -4356,6 +4376,7 @@ namespace LuaPlayer
         { "GetGossipTextId", &LuaPlayer::GetGossipTextId },
         { "GetQuestRewardStatus", &LuaPlayer::GetQuestRewardStatus },
         { "GetShieldBlockValue", &LuaPlayer::GetShieldBlockValue },
+        { "GetXP", &LuaPlayer::GetXP },
 #if defined(CLASSIC)
         { "GetHonorStoredKills", &LuaPlayer::GetHonorStoredKills },
         { "GetRankPoints", &LuaPlayer::GetRankPoints },
