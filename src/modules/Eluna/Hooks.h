@@ -205,6 +205,9 @@ namespace Hooks
         // UNUSED                               =     41,       // (event, player)
         PLAYER_EVENT_ON_COMMAND                 =     42,       // (event, player, command) - player is nil if command used from console. Can return false
 
+        // 自定义
+        PLAYER_EVENT_ON_KILLED_BY_PLAYER        =     43,       // (event, killer, killed) - 被玩家击杀时触发
+
         PLAYER_EVENT_COUNT
     };
 

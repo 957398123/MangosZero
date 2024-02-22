@@ -854,13 +854,29 @@ uint32 Unit::DealDamage(Unit* pVictim, uint32 damage, CleanDamage const* cleanDa
             ((Creature*)this)->AI()->KilledUnit(pVictim);
         }
 
+        // 如果玩家被生物击杀
         if (Creature* killer = ToCreature())
         {
             // Used by Eluna
 #ifdef ENABLE_ELUNA
             if (Player* killed = pVictim->ToPlayer())
             {
+                // 回调被生物击杀时lua事件函数
                 sEluna->OnPlayerKilledByCreature(killer, killed);
+            }
+#endif /* ENABLE_ELUNA */
+
+        }
+
+        // 如果是玩家被其它玩家击杀
+        if (Player* killer = ToPlayer())
+        {
+            // Used by Eluna
+#ifdef ENABLE_ELUNA
+            if (Player* killed = pVictim->ToPlayer())
+            {
+                // 回调被玩家击杀时lua事件函数
+                sEluna->OnPlayerKilledByPlayer(killer, killed);
             }
 #endif /* ENABLE_ELUNA */
 
