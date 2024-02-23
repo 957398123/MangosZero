@@ -41,7 +41,7 @@ enum EItemFields
 {
     ITEM_FIELD_OWNER                           = OBJECT_END + 0x00, // Size:2
     ITEM_FIELD_CONTAINED                       = OBJECT_END + 0x02, // Size:2
-    ITEM_FIELD_CREATOR                         = OBJECT_END + 0x04, // Size:2
+    ITEM_FIELD_CREATOR                         = OBJECT_END + 0x04, // Size:2 -物品的创造者
     ITEM_FIELD_GIFTCREATOR                     = OBJECT_END + 0x06, // Size:2
     ITEM_FIELD_STACK_COUNT                     = OBJECT_END + 0x08, // Size:1
     ITEM_FIELD_DURATION                        = OBJECT_END + 0x09, // Size:1
@@ -55,7 +55,7 @@ enum EItemFields
     ITEM_FIELD_PROPERTY_SEED                   = OBJECT_END + 0x25, // Size:1
     ITEM_FIELD_RANDOM_PROPERTIES_ID            = OBJECT_END + 0x26, // Size:1
     ITEM_FIELD_ITEM_TEXT_ID                    = OBJECT_END + 0x27, // Size:1
-    ITEM_FIELD_DURABILITY                      = OBJECT_END + 0x28, // Size:1
+    ITEM_FIELD_DURABILITY                      = OBJECT_END + 0x28, // Size:1 -物品最大耐久值
     ITEM_FIELD_MAXDURABILITY                   = OBJECT_END + 0x29, // Size:1
     ITEM_END                                   = OBJECT_END + 0x2A,
 };

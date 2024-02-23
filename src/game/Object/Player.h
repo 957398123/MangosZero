@@ -550,30 +550,35 @@ enum EquipmentSlots                                         // 19 slots
     EQUIPMENT_SLOT_END          = 19
 };
 
+// 额外背包
 enum InventorySlots                                         // 4 slots
 {
     INVENTORY_SLOT_BAG_START    = 19,
     INVENTORY_SLOT_BAG_END      = 23
 };
 
+// 默认背包
 enum InventoryPackSlots                                     // 16 slots
 {
     INVENTORY_SLOT_ITEM_START   = 23,
     INVENTORY_SLOT_ITEM_END     = 39
 };
 
+// 默认银行仓库背包
 enum BankItemSlots                                          // 28 slots
 {
     BANK_SLOT_ITEM_START        = 39,
     BANK_SLOT_ITEM_END          = 63
 };
 
+// 额外银行仓库背包
 enum BankBagSlots                                           // 7 slots
 {
     BANK_SLOT_BAG_START         = 63,
     BANK_SLOT_BAG_END           = 69
 };
 
+// 商店回购插槽
 enum BuyBackSlots                                           // 12 slots
 {
     // stored in m_buybackitems
@@ -581,6 +586,7 @@ enum BuyBackSlots                                           // 12 slots
     BUYBACK_SLOT_END            = 81
 };
 
+// 钥匙槽
 enum KeyRingSlots                                           // 32 slots
 {
     KEYRING_SLOT_START          = 81,
