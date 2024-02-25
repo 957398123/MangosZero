@@ -39,7 +39,7 @@ enum EObjectFields
 
 enum EItemFields
 {
-    ITEM_FIELD_OWNER                           = OBJECT_END + 0x00, // Size:2
+    ITEM_FIELD_OWNER                           = OBJECT_END + 0x00, // Size:2 -物品所有者
     ITEM_FIELD_CONTAINED                       = OBJECT_END + 0x02, // Size:2
     ITEM_FIELD_CREATOR                         = OBJECT_END + 0x04, // Size:2 -物品的创造者
     ITEM_FIELD_GIFTCREATOR                     = OBJECT_END + 0x06, // Size:2

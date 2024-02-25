@@ -43,17 +43,37 @@ class Bag : public Item
         void RemoveFromWorld() override;
 
         bool Create(uint32 guidlow, uint32 itemid, Player const* owner) override;
-
+        /**
+         * @brief 存储物品到背包指定插槽，并更新所有者信息，强制存储。
+         * @param slot 要存放的插槽
+         * @param pItem 物品
+         */
         void StoreItem(uint8 slot, Item* pItem);
+        /**
+         * @brief 
+         * @param slot 
+         */
         void RemoveItem(uint8 slot);
 
         Item* GetItemByPos(uint8 slot) const;
         Item* GetItemByEntry(uint32 item) const;
         uint32 GetItemCount(uint32 item, Item* eItem = NULL) const;
-
+        /**
+         * @brief 获取指定物品所在插槽
+         * @param guid 
+         * @return 
+         */
         uint8 GetSlotByItemGUID(ObjectGuid guid) const;
         bool IsEmpty() const;
+        /**
+         * @brief 获取背包剩余空间
+         * @return 
+         */
         uint32 GetFreeSlots() const;
+        /**
+         * @brief 获取背包大小      
+         * @return 
+         */
         uint32 GetBagSize() const { return GetUInt32Value(CONTAINER_FIELD_NUM_SLOTS); }
 
         // DB operations
@@ -61,7 +81,9 @@ class Bag : public Item
         void SaveToDB() override;
         // overwrite virtual Item::LoadFromDB
         bool LoadFromDB(uint32 guidLow, Field* fields, ObjectGuid ownerGuid = ObjectGuid()) override;
-        // overwrite virtual Item::DeleteFromDB
+        /**
+         * @brief 删除背包和背包里面所有物品
+         */
         void DeleteFromDB() override;
 
         void BuildCreateUpdateBlockForPlayer(UpdateData* data, Player* target) const override;
