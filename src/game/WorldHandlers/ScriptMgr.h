@@ -648,7 +648,11 @@ class ScriptMgr
         }
 
         uint32 GetBoundScriptId(ScriptedObjectType entity, int32 entry);
-
+        /**
+         * @brief 加载脚本模块
+         * @param libName 
+         * @return 
+         */
         ScriptLoadResult LoadScriptLibrary(const char* libName);
         void UnloadScriptLibrary();
         bool IsScriptLibraryLoaded() const

@@ -54,7 +54,13 @@ class ObjectGuid;
 class SD3
 {
 public:
+    /**
+     * @brief 释放脚本资源
+     */
     static void FreeScriptLibrary();
+    /**
+     * @brief 初始化脚本资源
+     */
     static void InitScriptLibrary();
     static char const* GetScriptLibraryVersion();
 
@@ -148,6 +154,10 @@ struct Script
     std::string Name;
     ScriptedObjectType Type;
 
+    /**
+     * @brief 注册自身的指针到脚本管理器
+     * @param bReportError 
+     */
     void RegisterSelf(bool bReportError = true);
     virtual bool IsValid() { return true; }
 
@@ -177,10 +187,29 @@ struct CreatureScript : public Script
     virtual bool OnGossipSelect(Player*, Creature*, uint32, uint32) { return false; }
     virtual bool OnGossipSelectWithCode(Player*, Creature*, uint32, uint32, const char*) { return false; }
     virtual uint32 OnDialogEnd(Player*, Creature*) { return DIALOG_STATUS_UNDEFINED; }
+    /**
+     * @brief 玩家接受任务时回调
+     * @param 接受任务的玩家
+     * @param 颁发任务者
+     * @param 任务数据
+     * @return 
+     */
     virtual bool OnQuestAccept(Player*, Creature*, Quest const*) { return false; }
+    /**
+     * @brief 接受任务奖励时回调
+     * @param  奖励玩家
+     * @param  颁发任务者
+     * @param  任务数据
+     * @return 
+     */
     virtual bool OnQuestRewarded(Player*, Creature*, Quest const*) { return false; }
     virtual bool OnSpellClick(Player*, Creature*, uint32) { return false; }
 
+    /**
+     * @brief 获取生物对应的AI
+     * @param  
+     * @return 
+     */
     virtual CreatureAI* GetAI(Creature*) { return nullptr; }
 };
 

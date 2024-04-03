@@ -1361,6 +1361,7 @@ void World::SetInitialWorldSettings()
     sLog.outString("Loading CreatureEventAI Scripts...");
     sEventAIMgr.LoadCreatureEventAI_Scripts();
 
+    // 加载SD3脚本
     sLog.outString("Initializing Scripts...");
 #ifdef ENABLE_SD3
     switch (sScriptMgr.LoadScriptLibrary("mangosscript"))

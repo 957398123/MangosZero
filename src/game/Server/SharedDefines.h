@@ -927,20 +927,20 @@ enum SpellImmunity
 #define MAX_SPELL_IMMUNITY           6
 
 /**
- * @brief ÎäÆ÷ÀàÐÍ
+ * @brief æ­¦å™¨ç±»åž‹
 */
 enum WeaponAttackType
 {
     /**
-     * @brief Ö÷ÊÖÎäÆ÷
+     * @brief ä¸»æ‰‹æ­¦å™¨
     */
     BASE_ATTACK   = 0,
     /**
-     * @brief ¸±ÊÖÎäÆ÷
+     * @brief å‰¯æ‰‹æ­¦å™¨
     */
     OFF_ATTACK    = 1,
     /**
-     * @brief Ô¶³ÌÎäÆ÷£¬¹­/Ä§ÕÈ
+     * @brief è¿œç¨‹æ­¦å™¨ï¼Œå¼“/é­”æ–
     */
     RANGED_ATTACK = 2
 };
@@ -1076,13 +1076,13 @@ enum SpellRangeIndex
 
 enum DamageEffectType
 {
-    DIRECT_DAMAGE           = 0,                            // Ö±½ÓÉËº¦£¨°××ÖÆÕÍ¨ÎäÆ÷ÉËº¦£©
-    SPELL_DIRECT_DAMAGE     = 1,                            // ·¨ÊõÉËº¦£¨·¨Êõ/Ö°Òµ¼¼ÄÜÉËº¦£©
-    DOT                     = 2,                            // ³ÖÐøÉËº¦
-    HEAL                    = 3,                            // ³ÖÐø»Ø¸´
+    DIRECT_DAMAGE           = 0,                            // ç›´æŽ¥ä¼¤å®³ï¼ˆç™½å­—æ™®é€šæ­¦å™¨ä¼¤å®³ï¼‰
+    SPELL_DIRECT_DAMAGE     = 1,                            // æ³•æœ¯ä¼¤å®³ï¼ˆæ³•æœ¯/èŒä¸šæŠ€èƒ½ä¼¤å®³ï¼‰
+    DOT                     = 2,                            // æŒç»­ä¼¤å®³
+    HEAL                    = 3,                            // æŒç»­å›žå¤
     NODAMAGE                = 4,                            //< used also in case when damage applied to health but not applied to spell channelInterruptFlags/etc
-    SELF_DAMAGE_ROGUE_FALL  = 5,                            // ÓÃÓÚ·ÀÖ¹µÁÔôÒþÉíºóÊÜµ½µôÂäÉËº¦ÆÆ³ýÒþÉí
-    SELF_DAMAGE             = 6                             // ×ÔÉíÔì³ÉµÄÉËº¦
+    SELF_DAMAGE_ROGUE_FALL  = 5,                            // ç”¨äºŽé˜²æ­¢ç›—è´¼éšèº«åŽå—åˆ°æŽ‰è½ä¼¤å®³ç ´é™¤éšèº«
+    SELF_DAMAGE             = 6                             // è‡ªèº«é€ æˆçš„ä¼¤å®³
 };
 
 enum GameobjectTypes
@@ -1718,7 +1718,7 @@ enum CreatureType
     CREATURE_TYPE_GIANT            = 5,
     CREATURE_TYPE_UNDEAD           = 6,
     CREATURE_TYPE_HUMANOID         = 7,
-    CREATURE_TYPE_CRITTER          = 8,                     // Ð¡¶¯Îï
+    CREATURE_TYPE_CRITTER          = 8,                     // å°åŠ¨ç‰©
     CREATURE_TYPE_MECHANICAL       = 9,
     CREATURE_TYPE_NOT_SPECIFIED    = 10,
     CREATURE_TYPE_TOTEM            = 11,

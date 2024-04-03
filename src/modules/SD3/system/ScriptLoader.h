@@ -27,8 +27,17 @@
 #ifndef SC_SCRIPTLOADER_H
 #define SC_SCRIPTLOADER_H
 
+/**
+ * @brief 增加脚本
+ */
 void AddScripts();
+/**
+ * @brief 东部王国脚本
+ */
 void AddEasternKingdomsScripts();
+/**
+ * @brief 卡利姆多脚本
+ */
 void AddKalimdorScripts();
 #if defined (TBC) || defined (WOTLK) || defined (CATA) || defined(MISTS)
 void AddOutlandsScripts();
@@ -36,7 +45,13 @@ void AddOutlandsScripts();
 #if defined (WOTLK) || defined (CATA) || defined(MISTS)
 void AddNorthrendScripts();
 #endif
+/**
+ * @brief 世界脚本
+ */
 void AddWorldScripts();
+/**
+ * @brief 战场脚本
+ */
 void AddBattlegroundScripts();
 
 #endif

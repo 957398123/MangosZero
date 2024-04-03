@@ -398,10 +398,13 @@ struct npc_chicken_cluck : public CreatureScript
 
     bool OnQuestAccept(Player* /*pPlayer*/, Creature* pCreature, const Quest* pQuest) override
     {
+        // 当玩家接受咕咕嘎任务时
         if (pQuest->GetQuestId() == QUEST_CLUCK)
         {
+            // 获取当前生物的AI
             if (npc_chicken_cluckAI* pChickenAI = dynamic_cast<npc_chicken_cluckAI*>(pCreature->AI()))
             {
+                // 重置AI
                 pChickenAI->Reset();
             }
         }
