@@ -66,7 +66,7 @@ int WorldThread::open(void* unused)
 #ifdef ENABLE_ELUNA
     sEluna->OnStartup();
 #endif /* ENABLE_ELUNA */
-
+    // 启动任务线程
     activate();
     return 0;
 }

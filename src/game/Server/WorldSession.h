@@ -609,8 +609,8 @@ class WorldSession
         void HandleUseItemOpcode(WorldPacket& recvPacket);
         void HandleOpenItemOpcode(WorldPacket& recvPacket);
         /**
-         * @brief 处理释放技能的操作
-         * @param recvPacket 接收的数据包
+         * @brief 澶勭悊閲婃斁鎶�鑳界殑鎿嶄綔
+         * @param recvPacket 鎺ユ敹鐨勬暟鎹寘
         */
         void HandleCastSpellOpcode(WorldPacket& recvPacket);
         void HandleCancelCastOpcode(WorldPacket& recvPacket);
