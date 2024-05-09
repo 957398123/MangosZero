@@ -49,8 +49,8 @@
  *
  * \see WorldPacket
  * \todo Replace the Pack GUID part with a packed GUID, ie: it's shorter than usual?
- * CMSG 客户端发送给服务器的消息
- * SMSG 服务器发送给客户端的消息
+ * CMSG 瀹㈡埛绔彂閫佺粰鏈嶅姟鍣ㄧ殑娑堟伅
+ * SMSG 鏈嶅姟鍣ㄥ彂閫佺粰瀹㈡埛绔殑娑堟伅
  */
 enum OpcodesList
 {

@@ -180,7 +180,9 @@ class WorldSocket : protected WorldHandler
         /// Keep track of over-speed pings ,to prevent ping flood.
         uint32 m_OverSpeedPings;
 
-        /// Address of the remote peer
+        /**
+         * @brief 客户端地址
+         */
         std::string m_Address;
 
         /// Class used for managing encryption of the headers

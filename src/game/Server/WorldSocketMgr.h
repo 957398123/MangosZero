@@ -53,6 +53,9 @@ class WorldSocketMgr : public ACE_Task_Base
 
     private:
         int OnSocketOpen(WorldSocket* sock);
+        /*
+        * 运行网络事件循环
+        */
         virtual int svc();
 
         WorldSocketMgr();

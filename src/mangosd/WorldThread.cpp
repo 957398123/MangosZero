@@ -56,6 +56,7 @@ WorldThread::WorldThread(uint16 port, const char* host) : listen_addr(port, host
 
 int WorldThread::open(void* unused)
 {
+    // 服务器开始侦听端口
     if (sWorldSocketMgr->StartNetwork(listen_addr) == -1)
     {
         sLog.outError("Failed to start network");

@@ -89,14 +89,14 @@ int WorldSocketMgr::StartNetwork(ACE_INET_Addr& addr)
     m_SockOutKBuff = sConfig.GetIntDefault("Network.OutKBuff", -1);
     m_UseNoDelay = sConfig.GetBoolDefault("Network.TcpNodelay", true);
 
-
+    // 创建多线程Reactor
     ACE_Reactor_Impl* imp = 0;
     imp = new ACE_TP_Reactor();
     imp->max_notify_iterations(128);
     reactor_ = new ACE_Reactor(imp, 1);
-
+    // 设置客户端连接时处理
     acceptor_ = new WorldAcceptor;
-
+    // 注册到对应Reactor
     if (acceptor_->open(addr, reactor_, ACE_NONBLOCK) == -1)
     {
         sLog.outError("Failed to open acceptor, check if the port is free");
