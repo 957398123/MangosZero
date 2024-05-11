@@ -302,10 +302,9 @@ int WorldSocket::handle_output(ACE_HANDLE)
     else if (n == -1)
     {
         if (errno == EWOULDBLOCK || errno == EAGAIN)
-            {
+        {
             return 0;
-            }
-
+        }
         return -1;
     }
     else if (n < (ssize_t)send_len) // now n > 0
@@ -357,26 +356,31 @@ int WorldSocket::handle_input_header(void)
 
     MANGOS_ASSERT(m_Header.length() == sizeof(ClientPktHeader));
 
+    // 解密请求头
     m_Crypt.DecryptRecv((uint8*) m_Header.rd_ptr(), sizeof(ClientPktHeader));
 
+    // 获取客户端请求头
     ClientPktHeader& header = *((ClientPktHeader*) m_Header.rd_ptr());
 
     EndianConvertReverse(header.size);
     EndianConvert(header.cmd);
 
+    // 判断是否为无效参数
     if ((header.size < 4) || (header.size > 10240) || (header.cmd  > 10240))
     {
         sLog.outError("WorldSocket::handle_input_header: client sent malformed packet size = %d , cmd = %d",
                       header.size, header.cmd);
-
+        // 返回无效参数
         errno = EINVAL;
         return -1;
     }
 
+    // 获取指令负荷大小
     header.size -= 4;
-
+    // 创建WorldPacket
     ACE_NEW_RETURN(m_RecvWPct, WorldPacket((uint16)header.cmd, header.size), -1);
 
+    // 如果不是纯命令，准备接收命令内容
     if (header.size > 0)
     {
         m_RecvWPct->resize(header.size);
@@ -432,10 +436,10 @@ int WorldSocket::handle_input_missing_data(void)
                                     0);
 
     const size_t recv_size = message_block.space();
-
+    // 尝试从连接的socket中读取最多recv_size个字节数据
     const ssize_t n = peer().recv(message_block.wr_ptr(),
                                   recv_size);
-
+    // 如果发生错误，返回
     if (n <= 0)
     {
         return (int)n;
@@ -452,6 +456,7 @@ int WorldSocket::handle_input_missing_data(void)
             m_Header.copy(message_block.rd_ptr(), to_header);
             message_block.rd_ptr(to_header);
 
+            // 返回，表示数据头还未读取完成
             if (m_Header.space() > 0)
             {
                 // Couldn't receive the whole header this time.
@@ -471,6 +476,7 @@ int WorldSocket::handle_input_missing_data(void)
         // Its possible on some error situations that this happens
         // for example on closing when epoll receives more chunked data and stuff
         // hope this is not hack ,as proper m_RecvWPct is asserted around
+        // 这里应该不会为空的，因为在handle_input_header中，对该变量进行了初始化，如果初始化失败直接返回-1。
         if (!m_RecvWPct)
         {
             sLog.outError("Forcing close on input m_RecvWPct = NULL");
@@ -485,7 +491,7 @@ int WorldSocket::handle_input_missing_data(void)
             const size_t to_data = (message_block.length() > m_RecvPct.space() ? m_RecvPct.space() : message_block.length());
             m_RecvPct.copy(message_block.rd_ptr(), to_data);
             message_block.rd_ptr(to_data);
-
+            // 如果本次读取客户端数据还没有收完
             if (m_RecvPct.space() > 0)
             {
                 // Couldn't receive the whole data this time.
@@ -495,7 +501,7 @@ int WorldSocket::handle_input_missing_data(void)
             }
         }
 
-        // just received fresh new payload
+        // 入队客户端packet，并刷新状态，准备收取下一个packet
         if (handle_input_payload() == -1)
         {
             MANGOS_ASSERT((errno != EWOULDBLOCK) && (errno != EAGAIN));
@@ -513,14 +519,17 @@ int WorldSocket::ProcessIncoming(WorldPacket* new_pct)
     // manage memory ;)
     ACE_Auto_Ptr<WorldPacket> aptr(new_pct);
 
+    // 获取操作码
     const ACE_UINT16 opcode = new_pct->GetOpcode();
 
+    // 如果操作码不存在
     if (opcode >= NUM_MSG_TYPES)
     {
         sLog.outError("SESSION: received nonexistent opcode 0x%.4X", opcode);
         return -1;
     }
 
+    // 如果连接已关闭
     if (closing_)
     {
         return -1;

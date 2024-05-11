@@ -137,7 +137,11 @@ class WorldSocket : protected WorldHandler
         /// Called on failures inside of the acceptor, don't call from your code.
         virtual int close(u_long) override;
 
-        /// Called when we can read from the socket.
+        /**
+         * @brief 当有数据可读时被回调
+         * @param  
+         * @return 
+         */
         virtual int handle_input(ACE_HANDLE = ACE_INVALID_HANDLE) override;
 
         /// Called when the socket can write.
@@ -148,9 +152,23 @@ class WorldSocket : protected WorldHandler
                                  ACE_Reactor_Mask = ACE_Event_Handler::ALL_EVENTS_MASK) override;
 
     private:
-        /// Helper functions for processing incoming data.
+        /**
+         * @brief 处理请求头
+         * @param  
+         * @return 
+         */
         int handle_input_header(void);
+        /**
+         * @brief 处理请求负荷
+         * @param  
+         * @return 
+         */
         int handle_input_payload(void);
+        /**
+         * @brief 读取数据处理
+         * @param  
+         * @return 
+         */
         int handle_input_missing_data(void);
 
         /// process one incoming packet.
@@ -185,13 +203,17 @@ class WorldSocket : protected WorldHandler
          */
         std::string m_Address;
 
-        /// Class used for managing encryption of the headers
+        /**
+         * @brief 用来管理请求头加密的类
+         */
         AuthCrypt m_Crypt;
 
         /// Session to which received packets are routed
         WorldSession* m_Session;
 
-        /// here are stored the fragments of the received data
+        /**
+         * @brief 客户端数据包
+         */
         WorldPacket* m_RecvWPct;
 
         /// This block actually refers to m_RecvWPct contents,

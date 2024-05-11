@@ -222,6 +222,10 @@ class WorldSession
         void LogoutPlayer(bool Save);
         void KickPlayer();
 
+        /**
+         * @brief 入队packet
+         * @param new_packet 
+         */
         void QueuePacket(WorldPacket* new_packet);
 
         bool Update(PacketFilter& updater);
@@ -776,6 +780,9 @@ class WorldSession
         uint32 m_Tutorials[8];
         TutorialDataState m_tutorialState;
         uint32 m_clientTimeDelay;
+        /**
+         * @brief 客户端数据包队列，并发安全队列
+         */
         ACE_Based::LockedQueue<WorldPacket*, ACE_Thread_Mutex> _recvQueue;
 };
 #endif
