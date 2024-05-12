@@ -246,7 +246,6 @@ void WorldSession::LogUnprocessedTail(WorldPacket* packet)
                   packet->rpos(), packet->wpos());
 }
 
-/// Update the WorldSession (triggered by World update)
 bool WorldSession::Update(PacketFilter& updater)
 {
     ///- Retrieve packets from the receive queue and call the appropriate handlers

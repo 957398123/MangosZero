@@ -228,6 +228,11 @@ class WorldSession
          */
         void QueuePacket(WorldPacket* new_packet);
 
+        /**
+         * @brief Update the WorldSession (triggered by World update)
+         * @param updater 
+         * @return 
+         */
         bool Update(PacketFilter& updater);
 
         /// Handle the authentication waiting queue (to be completed)

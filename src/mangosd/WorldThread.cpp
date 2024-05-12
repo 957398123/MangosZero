@@ -87,6 +87,7 @@ int WorldThread::svc()
 
         uint32 diff = getMSTimeDiff(realPrevTime, realCurrTime);
 
+        // 更新世界
         sWorld.Update(diff);
         realPrevTime = realCurrTime;
 

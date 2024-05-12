@@ -546,6 +546,10 @@ class World
         static void StopNow(uint8 exitcode) { m_stopEvent = true; m_ExitCode = exitcode; }
         static bool IsStopped() { return m_stopEvent; }
 
+        /**
+         * @brief 更新世界
+         * @param diff 距离上次世界更新时间
+         */
         void Update(uint32 diff);
 
         void UpdateSessions(uint32 diff);

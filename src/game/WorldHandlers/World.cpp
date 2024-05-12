@@ -2201,7 +2201,7 @@ void World::ShutdownCancel()
 
 void World::UpdateSessions(uint32 /*diff*/)
 {
-    ///- Add new sessions
+    // 处理新增的玩家会话
     WorldSession* sess;
     while (addSessQueue.next(sess))
     {
