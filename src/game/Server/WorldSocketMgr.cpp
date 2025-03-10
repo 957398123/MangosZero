@@ -91,12 +91,14 @@ int WorldSocketMgr::StartNetwork(ACE_INET_Addr& addr)
 
     // 创建多线程Reactor
     ACE_Reactor_Impl* imp = 0;
+    // 基于select调用，采用线程池调度的Reactor管理器
     imp = new ACE_TP_Reactor();
     imp->max_notify_iterations(128);
+    // 创建Reactor管理器
     reactor_ = new ACE_Reactor(imp, 1);
     // 设置客户端连接时处理
     acceptor_ = new WorldAcceptor;
-    // 注册到对应Reactor
+    // 监听端口，并注册处理事件到对应Reactor
     if (acceptor_->open(addr, reactor_, ACE_NONBLOCK) == -1)
     {
         sLog.outError("Failed to open acceptor, check if the port is free");

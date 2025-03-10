@@ -253,12 +253,7 @@ bool WorldSession::Update(PacketFilter& updater)
     WorldPacket* packet = NULL;
     while (m_Socket && !m_Socket->IsClosed() && _recvQueue.next(packet, updater))
     {
-        /*#if 1
-        sLog.outError( "MOEP: %s (0x%.4X)",
-                        packet->GetOpcodeName(),
-                        packet->GetOpcode());
-        #endif*/
-
+        // 获取操作码对应回调函数
         OpcodeHandler const& opHandle = opcodeTable[packet->GetOpcode()];
         try
         {

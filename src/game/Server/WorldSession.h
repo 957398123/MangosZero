@@ -756,6 +756,11 @@ class WorldSession
         bool VerifyMovementInfo(MovementInfo const& movementInfo) const;
         void HandleMoverRelocation(MovementInfo& movementInfo);
 
+        /**
+         * @brief 执行操作码
+         * @param opHandle 操作码
+         * @param packet 数据包
+         */
         void ExecuteOpcode(OpcodeHandler const& opHandle, WorldPacket* packet);
 
         // logging helper
