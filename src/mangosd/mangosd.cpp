@@ -469,6 +469,7 @@ int main(int argc, char** argv)
 
 	WorldDatabase.ThreadStart();
 
+	// 设置异步执行SQL
 	CharacterDatabase.AllowAsyncTransactions();
 	WorldDatabase.AllowAsyncTransactions();
 	LoginDatabase.AllowAsyncTransactions();
